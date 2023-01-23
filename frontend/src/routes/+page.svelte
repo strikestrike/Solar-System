@@ -95,10 +95,10 @@
 					<div class="flex-grow-1"></div>
 
 					<div class="view-ticket">
-						<a href="/">View Tickets</a>
+						<a href="/tickets/1">View Tickets</a>
 					</div>
 					<div class="view-history">
-						<a href="/">View History</a>
+						<a href="/history/1">View History</a>
 					</div>
 				</div>
 				<div class="item">
@@ -110,10 +110,10 @@
 					<div class="flex-grow-1"></div>
 
 					<div class="view-ticket">
-						<a href="/">View Tickets</a>
+						<a href="/tickets/1">View Tickets</a>
 					</div>
 					<div class="view-history">
-						<a href="/">View History</a>
+						<a href="/history/1">View History</a>
 					</div>
 				</div>
 			</div>
