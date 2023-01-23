@@ -1,10 +1,4 @@
 .idea
 frontend/node_modules
-frontend/.DS_Store
 frontend/build
-frontend/.netlify
-frontend/.svelte-kit
-frontend/.vercel_build_output
-frontend/.idea
-
 backend/node_modules
