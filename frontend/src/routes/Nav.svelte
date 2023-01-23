@@ -3,7 +3,7 @@
 </script>
 
 <nav class="navbar navbar-light">
-	<div class="container">
+	<div class="container-fluid">
 		<a class="navbar-brand" href="/">ProfitFlow</a>
 		<ul class="nav navbar-nav pull-xs-right">
 			<li class="nav-item">
@@ -11,11 +11,11 @@
 			</li>
 
 			{#if $page.data.user}
-				<li class="nav-item">
-					<a href="/editor" class="nav-link" class:active={$page.url.pathname === '/editor'}>
-						<i class="ion-compose" />&nbsp;New Post
-					</a>
-				</li>
+<!--				<li class="nav-item">-->
+<!--					<a href="/editor" class="nav-link" class:active={$page.url.pathname === '/editor'}>-->
+<!--						<i class="ion-compose" />&nbsp;New Post-->
+<!--					</a>-->
+<!--				</li>-->
 
 				<li class="nav-item">
 					<a href="/settings" class="nav-link" class:active={$page.url.pathname === '/settings'}>
@@ -25,7 +25,8 @@
 
 				<li class="nav-item">
 					<a href="/profile/@{$page.data.user.username}" class="nav-link">
-						{$page.data.user.username}
+						<!--{$page.data.user.username}-->
+						<i class="fas fa-user-circle"></i> Profile
 					</a>
 				</li>
 			{:else}
@@ -44,3 +45,13 @@
 		</ul>
 	</div>
 </nav>
+
+<style>
+	nav>div.container-fluid{
+		height: 100px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		border-bottom: 1px #e5e5e5 solid;
+	}
+</style>

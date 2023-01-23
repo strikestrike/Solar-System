@@ -10,8 +10,8 @@ type EnsureDefined<T> = T extends null | undefined ? {} : T;
 type OptionalUnion<U extends Record<string, any>, A extends keyof U = U extends U ? keyof U : never> = U extends unknown ? { [P in Exclude<A, keyof U>]?: never } & U : never;
 type PageServerParentData = EnsureDefined<LayoutServerData>;
 type PageParentData = EnsureDefined<LayoutData>;
-type LayoutRouteId = RouteId | "/" | "/article/[slug]" | "/editor" | "/editor/[slug]" | "/login" | "/profile" | "/profile/@[user]" | "/profile/@[user]/favorites" | "/register" | "/settings" | null
-type LayoutParams = RouteParams & { slug?: string,user?: string }
+type LayoutRouteId = RouteId | "/" | "/article/[slug]" | "/converter" | "/editor" | "/editor/[slug]" | "/history/[id]" | "/login" | "/profile" | "/profile/@[user]" | "/profile/@[user]/favorites" | "/register" | "/settings" | "/tickets/[id]" | null
+type LayoutParams = RouteParams & { slug?: string,id?: string,user?: string }
 type LayoutServerParentData = EnsureDefined<{}>;
 type LayoutParentData = EnsureDefined<{}>;
 

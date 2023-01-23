@@ -8,12 +8,20 @@
 		"src/routes/article/[slug]/+page.server.js",
 		"src/routes/+layout.server.js"
 	],
+	"/converter": [
+		"src/routes/converter/+page.server.js",
+		"src/routes/+layout.server.js"
+	],
 	"/editor": [
 		"src/routes/editor/+page.server.js",
 		"src/routes/+layout.server.js"
 	],
 	"/editor/[slug]": [
 		"src/routes/editor/[slug]/+page.server.js",
+		"src/routes/+layout.server.js"
+	],
+	"/history/[id]": [
+		"src/routes/history/[id]/+page.server.js",
 		"src/routes/+layout.server.js"
 	],
 	"/login": [
@@ -42,6 +50,10 @@
 	],
 	"/settings": [
 		"src/routes/settings/+page.server.js",
+		"src/routes/+layout.server.js"
+	],
+	"/tickets/[id]": [
+		"src/routes/tickets/[id]/+page.server.js",
 		"src/routes/+layout.server.js"
 	]
 }

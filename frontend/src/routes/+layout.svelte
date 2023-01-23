@@ -2,6 +2,7 @@
 	import { navigating } from '$app/stores';
 	import Nav from './Nav.svelte';
 	import PreloadingIndicator from './PreloadingIndicator.svelte';
+
 </script>
 
 {#if $navigating}
@@ -14,3 +15,6 @@
 	<slot />
 </main>
 
+<style>
+	main{height: calc(100vh - 116px);}
+</style>

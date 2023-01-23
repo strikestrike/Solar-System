@@ -1,6 +1,7 @@
 <script>
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
+	import SideBar from "./SideBar.svelte";
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -12,87 +13,57 @@
 	<title>{data.profile.username} • Conduit</title>
 </svelte:head>
 
-<div class="profile-page">
-	<div class="user-info">
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-12 col-md-10 offset-md-1">
-					<img src={data.profile.image} class="user-img" alt={data.profile.username} />
-					<h4>{data.profile.username}</h4>
-					{#if data.profile.bio}
-						<p>{data.profile.bio}</p>
-					{/if}
+<div class="profile-page container">
+	<h1>Profile: </h1>
 
-					{#if data.profile.username === data.user?.username}
-						<a href="/settings" class="btn btn-sm btn-outline-secondary action-btn">
-							<i class="ion-gear-a" />
-							Edit Profile Settings
-						</a>
-					{:else if data.user}
-						<form
-							method="POST"
-							action="/profile/@{data.profile.username}?/toggleFollow"
-							use:enhance={({ form }) => {
-								// optimistic UI
-								data.profile.following = !data.profile.following;
-
-								const button = form.querySelector('button');
-								button.disabled = true;
-
-								return ({ result, update }) => {
-									button.disabled = false;
-									if (result.type === 'error') update();
-								};
-							}}
-						>
-							<input hidden type="checkbox" name="following" checked={data.profile.following} />
-							<button
-								class="btn btn-sm action-btn"
-								class:btn-secondary={data.profile.following}
-								class:btn-outline-secondary={!data.profile.following}
-							>
-								<i class="ion-plus-round" />
-								{data.profile.following ? 'Unfollow' : 'Follow'}
-								{data.profile.username}
-							</button>
-						</form>
-					{:else}
-						<a href="/login">Sign in to follow</a>
-					{/if}
-				</div>
-			</div>
+	<div class="avatar">
+		<div class="photo">
+			<img src="/converter.png" alt="User avatar">
+		</div>
+		<div class="user-name">
+			<div>Username: </div>
+			<div>{$page.data.user.username}</div>
 		</div>
 	</div>
 
-	<div class="container">
-		<div class="row">
-			<div class="col-xs-12 col-md-10 offset-md-1">
-				<div class="articles-toggle">
-					<ul class="nav nav-pills outline-active">
-						<li class="nav-item">
-							<a
-								href="/profile/@{data.profile.username}"
-								class="nav-link"
-								class:active={!is_favorites}
-							>
-								Articles
-							</a>
-						</li>
-
-						<li class="nav-item">
-							<a
-								href="/profile/@{data.profile.username}/favorites"
-								class="nav-link"
-								class:active={is_favorites}
-							>
-								Favorites
-							</a>
-						</li>
-					</ul>
-				</div>
-
-				<slot />
-			</div>
+	<div class="info">
+		<div>
+			<div class="">First Name: </div>
+			<div>name</div>
+		</div>
+		<div>
+			<div class="">Last Name: </div>
+			<div>surname</div>
+		</div>
+		<div>
+			<div class="">E-mail: </div>
+			<div>www@gmail.com</div>
+		</div>
+		<div>
+			<div class="">Address: </div>
+			<div>Welingstraat 89, 4523FR</div>
+		</div>
+		<div>
+			<div class="">Birthday: </div>
+			<div>13-02-1990</div>
 		</div>
 	</div>
 </div>
+
+<style>
+	.profile-page{padding-top: 40px;}
+	.profile-page>h1{margin-bottom: 40px;}
+	.profile-page div.avatar{display: flex;margin-bottom: 40px;}
+	.profile-page div.avatar>.photo{margin-right: 40px;}
+	.profile-page div.avatar>.photo>img{width: 200px;border-radius: 100px;}
+	.profile-page div.avatar>.user-name{
+		display: flex;
+		align-items: center;
+		font-size: 24px;
+	}
+	.profile-page div.avatar>.user-name>div:nth-child(1){margin-right: 10px;}
+
+	.profile-page .info{font-size: 24px;}
+	.profile-page .info>div{display: flex;}
+	.profile-page .info>div>div:nth-child(1){margin-right: 10px;}
+</style>

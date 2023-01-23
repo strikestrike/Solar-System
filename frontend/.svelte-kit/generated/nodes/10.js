@@ -1,2 +1,3 @@
-export { default as component } from "../../../src/routes/profile/@[user]/favorites/+page.svelte";
-export const has_server_load = true;
+import * as universal from "../../../src/routes/profile/+page.js";
+export { universal };
+export { default as component } from "../../../src/routes/profile/+page.svelte";

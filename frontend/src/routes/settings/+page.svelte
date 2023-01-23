@@ -17,13 +17,12 @@
 	<div class="container page">
 		<div class="row">
 			<div class="col-md-6 offset-md-3 col-xs-12">
-				<h1 class="text-xs-center">Your Settings</h1>
+				<h1 class="text-xs-center">Your Settings:</h1>
 
 				<ListErrors errors={form?.errors} />
 
-				<form
-					use:enhance={() => {
-						return ({ update }) => {
+				<form use:enhance={() => {
+						({ update }) => {
 							// don't clear the form when we update the profile
 							update({ reset: false });
 						};
@@ -33,6 +32,7 @@
 				>
 					<fieldset>
 						<fieldset class="form-group">
+							<label>Picture:</label>
 							<input
 								class="form-control"
 								name="image"
@@ -43,6 +43,7 @@
 						</fieldset>
 
 						<fieldset class="form-group">
+							<label>User Name:</label>
 							<input
 								class="form-control form-control-lg"
 								name="username"
@@ -52,17 +53,18 @@
 							/>
 						</fieldset>
 
-						<fieldset class="form-group">
-							<textarea
-								class="form-control form-control-lg"
-								name="bio"
-								rows="8"
-								placeholder="Short bio about you"
-								value={data.user.bio}
-							/>
-						</fieldset>
+						<!--<fieldset class="form-group">-->
+						<!--	<textarea-->
+						<!--		class="form-control form-control-lg"-->
+						<!--		name="bio"-->
+						<!--		rows="8"-->
+						<!--		placeholder="Short bio about you"-->
+						<!--		value={data.user.bio}-->
+						<!--	/>-->
+						<!--</fieldset>-->
 
 						<fieldset class="form-group">
+							<label>Email:</label>
 							<input
 								class="form-control form-control-lg"
 								name="email"
@@ -73,23 +75,30 @@
 						</fieldset>
 
 						<fieldset class="form-group">
+							<label>Password:</label>
 							<input
 								class="form-control form-control-lg"
 								name="password"
 								type="password"
-								placeholder="New Password"
+								placeholder="New Password" style="margin-bottom: 10px;"
+							/>
+							<input
+								class="form-control form-control-lg"
+								name="password"
+								type="password"
+								placeholder="Confirm Password"
 							/>
 						</fieldset>
 
-						<button class="btn btn-lg btn-primary pull-xs-right">Update Settings</button>
+						<button class="btn btn-lg btn-primary pull-xs-right">Save Settings</button>
 					</fieldset>
 				</form>
 
 				<hr />
 
-				<form use:enhance method="POST" action="?/logout">
-					<button class="btn btn-outline-danger">Or click here to logout.</button>
-				</form>
+				<!--<form use:enhance method="POST" action="?/logout">-->
+				<!--	<button class="btn btn-outline-danger">Or click here to logout.</button>-->
+				<!--</form>-->
 			</div>
 		</div>
 	</div>
