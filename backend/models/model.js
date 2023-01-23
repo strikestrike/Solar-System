@@ -1,10 +1,11 @@
 //importing modules
-const {Sequelize, DataTypes} = require('sequelize')
+const {Sequelize, DataTypes} = require('sequelize');
+require('dotenv').config();
 
 //Database connection with dialect of postgres specifying the database we are using
 //port for my database is 5432
 //database name is discover
-const sequelize = new Sequelize(`postgres://postgres:root@localhost:5432/solor_db`, {dialect: "postgres"})
+const sequelize = new Sequelize(process.env.DEV_DATABASE_URL, {dialect: "postgres"})
 
 //checking if connection is done
     sequelize.authenticate().then(() => {
