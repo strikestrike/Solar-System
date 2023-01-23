@@ -1,4 +1,4 @@
-//user model
+//event model
 module.exports = (sequelize, DataTypes) => {
     const Event = sequelize.define("event", {
         converter_id: {
@@ -13,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.TEXT,
             allowNull: false
         },
-    }, { timestamps: true },)
+    }, {
+        timestamps: true,
+        underscored: true
+    })
     return Event
 }

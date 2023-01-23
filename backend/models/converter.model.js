@@ -1,7 +1,11 @@
-//user model
+//converter model
 module.exports = (sequelize, DataTypes) => {
     const Converter = sequelize.define("converter", {
-        serialNumber: {
+        brand: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        serial_number: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -17,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-    }, { timestamps: true },)
+    }, {
+        timestamps: true,
+        underscored: true
+    })
     return Converter
 }

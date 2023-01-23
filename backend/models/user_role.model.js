@@ -1,4 +1,4 @@
-//user model
+//user role model
 module.exports = (sequelize, DataTypes) => {
     const UserRole = sequelize.define("user_role", {
         role: {
@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-    }, { timestamps: true },)
+    }, {
+        timestamps: true,
+        underscored: true
+    })
     return UserRole
 }

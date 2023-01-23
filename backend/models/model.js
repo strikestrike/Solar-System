@@ -19,7 +19,6 @@ db.Sequelize = Sequelize
 db.sequelize = sequelize
 
 //connecting to model
-db.users = require('./user.model')(sequelize, DataTypes)
 db.companies = require('./company.model')(sequelize, DataTypes)
 db.converters = require('./converter.model')(sequelize, DataTypes)
 db.customers = require('./customer.model')(sequelize, DataTypes)

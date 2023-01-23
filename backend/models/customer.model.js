@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
             isEmail: true, //checks for email format
             allowNull: false
         },
+        phone: {
+            type: DataTypes.STRING,
+            isPhone: true, //checks for email format
+        },
         password: {
             type: DataTypes.STRING,
             allowNull: false
@@ -19,6 +23,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-    }, { timestamps: true },)
+    }, {
+        timestamps: true,
+        underscored: true
+    })
     return Customer
 }

@@ -1,4 +1,4 @@
-//user model
+//ticket model
 module.exports = (sequelize, DataTypes) => {
     const Ticket = sequelize.define("ticket", {
         title: {
@@ -25,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-    }, { timestamps: true },)
+    }, {
+        timestamps: true,
+        underscored: true
+    })
     return Ticket
 }

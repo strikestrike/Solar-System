@@ -1,4 +1,4 @@
-//user model
+//throughput model
 module.exports = (sequelize, DataTypes) => {
     const Throughput = sequelize.define("throughput", {
         converter_id: {
@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.FLOAT,
             allowNull: false
         },
-    }, { timestamps: true },)
+    }, {
+        timestamps: true,
+        underscored: true
+    })
     return Throughput
 }
