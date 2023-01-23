@@ -1,8 +1,20 @@
-const db = require('../config/db.config');
-
-exports.signin = async (email, password, callback) => {
-    console.log(email);
-    const { rows } = await db.query("SELECT * FROM users where email = $1 and password = $2;", [email, password]);
-    // const {rows} = await db.query("SELECT * FROM users");
-    callback(null ,rows);
-}
+//user model
+module.exports = (sequelize, DataTypes) => {
+    const User = sequelize.define( "user", {
+        userName: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        email: {
+            type: DataTypes.STRING,
+            unique: true,
+            isEmail: true, //checks for email format
+            allowNull: false
+        },
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+    }, {timestamps: true}, )
+    return User
+ }

@@ -3,7 +3,7 @@ module.exports = app => {
     var router = require("express").Router();
 
     // User Routing
-    router.post('/signin', user.singin);
+    router.get('/signin', user.singin);
 
     app.use('/api/', router);
 };
