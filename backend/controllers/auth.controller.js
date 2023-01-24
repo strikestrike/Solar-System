@@ -25,7 +25,7 @@ exports.singin = async (req, res) => {
             expiresIn: 1 * 24 * 60 * 60 * 1000
         });
         res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-        return res.status(200).json({ message: "Logged in successfully", role: role.role });
+        return res.status(200).json({ message: "Logged in successfully", role: role.role, user: user });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ error: "Server error" });
@@ -54,7 +54,7 @@ exports.singup = async (req, res) => {
                 role,
                 user_id: customer.id
             });
-            return res.status(201).json({ message: "Customer created successfully" });
+            return res.status(201).json({ message: "Customer created successfully", user: customer, user_role: user_role });
         } else if (role === "company_admin") {
             const company = await Company.create({
                 name,
@@ -67,7 +67,7 @@ exports.singup = async (req, res) => {
                 role,
                 user_id: company.id
             });
-            return res.status(201).json({ message: "Company admin created successfully" });
+            return res.status(201).json({ message: "Company admin created successfully", user: company, user_role: user_role });
         } else {
             return res.status(401).json({ error: "Invalid role" });
         }
