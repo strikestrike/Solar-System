@@ -2,7 +2,7 @@
   "bundler": "rollup",
   "shimport": "2.0.4",
   "assets": {
-    "main": "client.bd151cc8.js"
+    "main": "client.275a6f9f.js"
   },
   "css": {
     "main": [
@@ -11,74 +11,74 @@
   },
   "dependencies": {
     "index.svelte": [
-      "index.4df82241.js",
+      "index.2d308f15.js",
       "inject_styles.5607aec6.js",
       "index-55502418.css"
     ],
     "doggie-details.svelte": [
-      "doggie-details.a96aa0ba.js",
+      "doggie-details.ed7edc65.js",
       "inject_styles.5607aec6.js"
     ],
     "converter/index.svelte": [
-      "index.83f2616e.js",
+      "index.96cf21ee.js",
       "inject_styles.5607aec6.js",
       "index-604638e5.css"
     ],
     "converter/[id].svelte": [
-      "_id_.b1956763.js",
+      "_id_.d0618bbd.js",
       "inject_styles.5607aec6.js",
       "_id_-f76e19fd.css"
     ],
     "settings/index.svelte": [
-      "index.72ee8fdd.js",
+      "index.301a2ac4.js",
       "inject_styles.5607aec6.js"
     ],
     "history/[id].svelte": [
-      "_id_.3255c083.js",
+      "_id_.769c36ff.js",
       "inject_styles.5607aec6.js",
       "_id_-252ec1aa.css"
     ],
     "profile/index.svelte": [
-      "index.8def38f6.js",
+      "index.852d18f7.js",
       "inject_styles.5607aec6.js",
       "index-5050e080.css"
     ],
     "tickets/[id].svelte": [
-      "_id_.b4f51146.js",
+      "_id_.11d21ef1.js",
       "inject_styles.5607aec6.js",
       "_id_-252ec1aa.css"
     ],
     "about.svelte": [
-      "about.076555da.js",
+      "about.3c8bf227.js",
       "inject_styles.5607aec6.js"
     ],
     "admin/customers/index.svelte": [
-      "index.078a190b.js",
+      "index.3709b682.js",
       "inject_styles.5607aec6.js",
       "index-b94b2e2d.css"
     ],
     "admin/customers/[id].svelte": [
-      "_id_.a74f8299.js",
+      "_id_.a8ed3786.js",
       "inject_styles.5607aec6.js",
-      "_id_-f76e19fd.css"
+      "_id_-804c2c60.css"
     ],
     "admin/add-user/index.svelte": [
-      "index.1c1a109b.js",
+      "index.7894089d.js",
       "inject_styles.5607aec6.js",
       "index-e8b8051c.css"
     ],
     "login.svelte": [
-      "login.b87b8bd5.js",
+      "login.a341c04d.js",
       "inject_styles.5607aec6.js",
       "login-339370cd.css"
     ],
     "blog/index.svelte": [
-      "index.0b719eeb.js",
+      "index.3f2e9fd0.js",
       "inject_styles.5607aec6.js",
       "index-7ed37c94.css"
     ],
     "blog/[slug].svelte": [
-      "_slug_.547f1856.js",
+      "_slug_.5353b04a.js",
       "inject_styles.5607aec6.js",
       "_slug_-5bc8f95f.css"
     ]

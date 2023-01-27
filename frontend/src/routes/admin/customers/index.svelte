@@ -91,7 +91,7 @@
 					<tbody>
 						{#each posts as item}
 							<tr>
-								<td><a href="/admin/customers/{item.id}" target="_blank">{item.title}</a></td>
+								<td><a href="/admin/customers/{item.id}">{item.title}</a></td>
 								<td class="center"><a href="/tickets/{item.id}"><i class="fas fa-edit"></i></a></td>
 								<td class="center"><a href="/history/{item.id}"><i class="fas fa-trash-alt"></i></a></td>
 							</tr>
