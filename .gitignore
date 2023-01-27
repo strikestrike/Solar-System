@@ -1,5 +1,6 @@
 .idea
 frontend/node_modules
+frontend/__sapper__
 frontend/.sessions
 frontend/src/node_modules
 frontend/build
