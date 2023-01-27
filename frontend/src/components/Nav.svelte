@@ -1,6 +1,7 @@
 <script>
 	export let segment;
 	export let isLogin;
+	export let role;
 </script>
 
 <style>
@@ -69,15 +70,21 @@
 		</div>
 
 		<ul class="nav navbar-nav pull-xs-right">
-			<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">home</a></li>
-			<li><a aria-current="{segment === 'converter' ? 'page' : undefined}" href="/converter">converter</a></li>
+			<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">Home</a></li>
+
+			{#if role == 'customer'}
+				<li><a aria-current="{segment === 'converter' ? 'page' : undefined}" href="/converter">Converter</a></li>
+			{/if}
+			{#if role == 'admin'}
+				<li><a aria-current="{segment === 'admin/customers' ? 'page' : undefined}" href="/admin/customers">Customers</a></li>
+			{/if}
 
 			{#if isLogin}
-				<li><a rel=prefetch aria-current="{segment === 'profile' ? 'page' : undefined}" href="/profile">profile</a></li>
-				<li><a rel=prefetch aria-current="{segment === 'settings' ? 'page' : undefined}" href="/settings">settings</a></li>
+				<li><a rel=prefetch aria-current="{segment === 'profile' ? 'page' : undefined}" href="/profile">Profile</a></li>
+				<li><a rel=prefetch aria-current="{segment === 'settings' ? 'page' : undefined}" href="/settings">Settings</a></li>
 				<li><a rel=prefetch href="/logout">logout</a></li>
 			{:else }
-				<li><a rel=prefetch aria-current="{segment === 'login' ? 'page' : undefined}" href="login">login</a></li>
+				<li><a rel=prefetch aria-current="{segment === 'login' ? 'page' : undefined}" href="login">Login</a></li>
 			{/if}
 
 		</ul>

@@ -1,11 +1,11 @@
 <script context="module">
 	export async function preload(page, session) {
-		const { token } = session;
+		const { token, role } = session;
 
 		if (token) {
-			return {isLogin: true};
+			return {isLogin: true, role: role};
 		}else{
-			return {isLogin: false};
+			return {isLogin: false, role: ''};
 		}
 	}
 </script>
@@ -14,6 +14,7 @@
 	import Nav from '../components/Nav.svelte';
 
 	export let isLogin = false;
+	export let role = '';
 	export let segment;
 </script>
 
@@ -21,7 +22,7 @@
 	main{height: calc(100vh - 116px);}
 </style>
 
-<Nav {segment} {isLogin} />
+<Nav {segment} {isLogin} {role} />
 
 <main>
 	<slot></slot>

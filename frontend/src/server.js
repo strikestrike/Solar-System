@@ -31,7 +31,8 @@ polka() // You can also use Express
 		sapper.middleware({
 			session: (req, res) => {
 				return ({
-					token: req.session.token
+					token: req.session.token,
+					role: req.session.role
 				})}
 		})
 	)

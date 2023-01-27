@@ -22,7 +22,16 @@
             error = parsed.error;
         } else {
             $session.token = parsed.token;
-            location.href = '/converter';
+            $session.role = parsed.role;
+
+            if(parsed.role == 'customer'){
+                location.href = '/converter';
+            }else if(parsed.role == 'admin'){
+                location.href = '/admin/customers';
+            }else{
+                location.href = '/';
+            }
+
         }
     };
 </script>
