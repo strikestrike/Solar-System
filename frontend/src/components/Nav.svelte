@@ -69,7 +69,7 @@
 			<a class="navbar-brand" href="/">ProfitFlow</a>
 		</div>
 
-		<ul class="nav navbar-nav pull-xs-right">
+		<ul class="nav pull-xs-right">
 			<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">Home</a></li>
 
 			{#if role == 'customer'}
