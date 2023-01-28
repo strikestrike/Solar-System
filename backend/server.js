@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var route = require("./routes/index.js");
 const cookieParser = require('cookie-parser');
 const db = require('./models/model');
+global.__basedir = __dirname;
 
 var app = express();
 app.use(cors("*"));

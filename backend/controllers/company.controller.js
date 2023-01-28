@@ -35,7 +35,7 @@ exports.createCompany = async (req, res) => {
 }
 
 exports.getCompanies = async (req, res) => {
-    const search = req.query.search;
+    const search = req.query.q;
     var condition = search ? {
         [Op.and]: [
             { name: { [Op.iLike]: `%${search}%` } },

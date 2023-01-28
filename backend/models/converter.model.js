@@ -5,6 +5,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        photo: {
+            type: DataTypes.STRING,
+        },
         serial_number: {
             type: DataTypes.STRING,
             allowNull: false
@@ -24,6 +27,13 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         timestamps: true,
         underscored: true
-    })
+    });
+
+    Converter.associate = function (models) {
+        Converter.hasMany(models.Ticket, { foreignKey: 'converter_id', as: 'tickets' })
+        Converter.hasMany(models.Event, { foreignKey: 'converter_id', as: 'events' })
+        Converter.hasOne(models.Throughput, { foreignKey: 'converter_id', as: 'role' })
+    };
+
     return Converter
 }

@@ -28,7 +28,7 @@ exports.createTicket = async (req, res) => {
 }
 
 exports.getTickets = async (req, res) => {
-    const search = req.query.search;
+    const search = req.query.q;
     var condition = search ? {
         [Op.and]: [
             { title: { [Op.iLike]: `%${search}%` } },

@@ -1,3 +1,25 @@
+const auth_middleware = require("../middleware/auth");
+const multer = require("multer");
+
+const imageFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith("image")) {
+        cb(null, true);
+    } else {
+        cb("Please upload only images.", false);
+    }
+};
+
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, __basedir + "/uploads/");
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-bezkoder-${file.originalname}`);
+    },
+});
+
+var photoFile = multer({ storage: storage, fileFilter: imageFilter });
+
 module.exports = app => {
     var router = require("express").Router();
     const auth = require('../controllers/auth.controller');
@@ -10,17 +32,18 @@ module.exports = app => {
 
     // Authentication Routing
     router.post('/signin', auth.singin);
-    router.post('/signup', auth.singup);
+    router.post('/signup', photoFile.single('avatar'), auth.singup);
+    router.post('/updateProfile', auth_middleware, auth.updateProfile);
 
     // Company routes
     router.post("/companies", company.createCompany);
-    router.get("/companies", company.getCompanies);
+    router.get("/companies", /*auth_middleware,*/ company.getCompanies);
     router.get("/companies/:id", company.getCompanyById);
     router.put("/companies/:id", company.updateCompany);
     router.delete("/companies/:id", company.deleteCompany);
 
     // Converter routes
-    router.post("/converters", converter.createConverter);
+    router.post("/converters", photoFile.single('photo'), converter.createConverter);
     router.get("/converters", converter.getConverters);
     router.get("/converters/:id", converter.getConverterById);
     router.put("/converters/:id", converter.updateConverter);

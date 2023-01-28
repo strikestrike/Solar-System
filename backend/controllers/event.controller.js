@@ -26,7 +26,7 @@ exports.createEvent = async (req, res) => {
 }
 
 exports.getEvents = async (req, res) => {
-    const search = req.query.search;
+    const search = req.query.q;
     var condition = search ? { event_data: { [Op.iLike]: `%${search}%` } } : null;
 
     Event.findAll({ where: condition })
