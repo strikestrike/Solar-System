@@ -5,6 +5,7 @@ frontend/.sessions
 frontend/src/node_modules
 frontend/build
 frontend/.svelte-kit
+frontend/package-lock.json
 
 
 backend/node_modules
