@@ -7,7 +7,27 @@
 </script>
 
 <script>
+	import {onMount} from 'svelte';
+	import Modal from "../../../components/Modal.svelte";
+
 	export let posts;
+
+	let showModal;
+	let showConfirm = false;
+	let confirmText;
+	let confirmOkText;
+
+	onMount(() => {
+
+	});
+
+	function clickDeleteCustomer(){
+		showConfirm = true;
+
+		confirmText = 'Are you sure you want to delete this customer?';
+		confirmOkText = 'Yes';
+	}
+
 </script>
 
 <style>
@@ -57,6 +77,8 @@
 	<title>Customers | ProfitFLow</title>
 </svelte:head>
 
+<Modal {showConfirm}  />
+
 <div class="home-page">
 	<div class="search-bar container">
 		<div>
@@ -93,7 +115,7 @@
 							<tr>
 								<td><a href="/admin/customers/{item.id}">{item.title}</a></td>
 								<td class="center"><a href="/tickets/{item.id}"><i class="fas fa-edit"></i></a></td>
-								<td class="center"><a href="/history/{item.id}"><i class="fas fa-trash-alt"></i></a></td>
+								<td class="center"><span on:click={clickDeleteCustomer}><i class="fas fa-trash-alt"></i></span></td>
 							</tr>
 						{/each}
 					</tbody>
