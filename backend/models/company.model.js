@@ -1,9 +1,21 @@
 //company model
 module.exports = (sequelize, DataTypes) => {
     const Company = sequelize.define("company", {
-        name: {
+        first_name: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        last_name: {
+            type: DataTypes.STRING,
+        },
+        address: {
+            type: DataTypes.STRING,
+        },
+        birthday: {
+            type: DataTypes.DATEONLY,
+        },
+        avatar: {
+            type: DataTypes.STRING,
         },
         email: {
             type: DataTypes.STRING,
@@ -26,6 +38,12 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         timestamps: true,
         underscored: true
-    })
+    });
+
+    Company.associate = function (models) {
+        Company.hasMany(models.Converter, { foreignKey: 'company_id', as: 'converters' })
+        Company.hasOne(models.UserRole, { foreignKey: 'user_id', as: 'role' })
+    };
+
     return Company
 }

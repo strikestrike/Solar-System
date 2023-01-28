@@ -13,6 +13,7 @@ exports.createConverter = async (req, res) => {
     // Create a converter
     const converter = {
         brand: brand,
+        photo: (req.file !== undefined ? "/uploads/" + req.file.filename : null),
         serial_number: serial_number,
         status: status,
         company_id: company_id,
@@ -33,7 +34,7 @@ exports.createConverter = async (req, res) => {
 }
 
 exports.getConverters = async (req, res) => {
-    const search = req.query.search;
+    const search = req.query.q;
     var condition = search ? {
         [Op.and]: [
             { brand: { [Op.iLike]: `%${search}%` } },

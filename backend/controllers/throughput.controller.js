@@ -26,7 +26,7 @@ exports.createThroughput = async (req, res) => {
 }
 
 exports.getThroughputs = async (req, res) => {
-    const search = req.query.search;
+    const search = req.query.q;
     var condition = search ? { expected_throughput: { [Op.iLike]: `%${search}%` } } : null;
 
     Throughput.findAll({ where: condition })
