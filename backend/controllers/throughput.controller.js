@@ -1,16 +1,19 @@
 const db = require('../models/model');
+const { check, validationResult } = require('express-validator');
 
 const Op = db.Sequelize.Op;
 const Throughput = db.throughputs;
 
 exports.createThroughput = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     const { converter_id, expected_throughput } = req.body;
 
     // Create a Throughput
-    const throughput = {
-        converter_id: req.body.converter_id,
-        expected_throughput: req.body.expected_throughput,
-    };
+    const throughput = { converter_id, expected_throughput };
 
     // Save Throughput in the database
     Throughput.create(throughput)
@@ -27,7 +30,7 @@ exports.createThroughput = async (req, res) => {
 
 exports.getThroughputs = async (req, res) => {
     const search = req.query.q;
-    var condition = search ? { expected_throughput: { [Op.iLike]: `%${search}%` } } : null;
+    var condition = search ? { expected_throughput: { [Op.eq]: search } } : null;
 
     Throughput.findAll({ where: condition })
         .then(data => {
@@ -108,3 +111,8 @@ exports.deleteThroughput = async (req, res) => {
             });
         });
 }
+
+exports.throughputValidations = [
+    check('converter_id', 'Converter id is required').not().isEmpty(),
+    check('expected_throughput', 'Expected throughput id is required').not().isEmpty()
+];

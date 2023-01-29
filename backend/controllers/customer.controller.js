@@ -37,7 +37,7 @@ exports.createCustomer = async (req, res) => {
 exports.getCustomers = async (req, res) => {
     const search = req.query.q;
     var condition = search ? {
-        [Op.and]: [
+        [Op.or]: [
             { name: { [Op.iLike]: `%${search}%` } },
             { email: { [Op.iLike]: `%${search}%` } }
         ]

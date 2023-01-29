@@ -23,6 +23,7 @@ var photoFile = multer({ storage: storage, fileFilter: imageFilter });
 module.exports = app => {
     var router = require("express").Router();
     const auth = require('../controllers/auth.controller');
+    const user = require('../controllers/user.controller');
     const company = require('../controllers/company.controller');
     const converter = require('../controllers/converter.controller');
     const customer = require('../controllers/customer.controller');
@@ -34,6 +35,13 @@ module.exports = app => {
     router.post('/signin', auth.singin);
     router.post('/signup', photoFile.single('avatar'), auth.signupValidations, auth.signup);
     router.post('/updateProfile', photoFile.single('avatar'), auth_middleware, auth.updateProfile);
+
+    // User routes
+    router.post("/users", photoFile.single('avatar'), user.userValidations, user.createUser);
+    router.get("/users", user.getUsers);
+    router.get("/users/:id", user.getUserById);
+    router.put("/users/:id", photoFile.single('avatar'), user.updateUser);
+    router.delete("/users/:id", user.deleteUser);
 
     // Company routes
     router.post("/companies", photoFile.single('photo'), company.companyValidations, company.createCompany);
@@ -57,21 +65,21 @@ module.exports = app => {
     router.delete("/customers/:id", customer.deleteCustomer);
 
     // Event routes
-    router.post("/events", event.createEvent);
+    router.post("/events", event.eventValidations, event.createEvent);
     router.get("/events", event.getEvents);
     router.get("/events/:id", event.getEventById);
     router.put("/events/:id", event.updateEvent);
     router.delete("/events/:id", event.deleteEvent);
 
     // Throughput routes
-    router.post("/throughputs", throughput.createThroughput);
+    router.post("/throughputs", throughput.throughputValidations, throughput.createThroughput);
     router.get("/throughputs", throughput.getThroughputs);
     router.get("/throughputs/:id", throughput.getThroughputById);
     router.put("/throughputs/:id", throughput.updateThroughput);
     router.delete("/throughputs/:id", throughput.deleteThroughput);
 
     // Ticket routes
-    router.post("/tickets", ticket.createTicket);
+    router.post("/tickets", ticket.ticketValidations, ticket.createTicket);
     router.get("/tickets", ticket.getTickets);
     router.get("/tickets/:id", ticket.getTicketById);
     router.put("/tickets/:id", ticket.updateTicket);

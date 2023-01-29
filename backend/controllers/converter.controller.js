@@ -44,7 +44,7 @@ exports.createConverter = async (req, res) => {
 exports.getConverters = (req, res) => {
     const search = req.query.q;
     var condition = search ? {
-        [Op.and]: [
+        [Op.or]: [
             { brand: { [Op.iLike]: `%${search}%` } },
             { description: { [Op.iLike]: `%${search}%` } },
             { serial_number: { [Op.iLike]: `%${search}%` } }

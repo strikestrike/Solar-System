@@ -1,18 +1,18 @@
 const db = require('../models/model');
+const { check, validationResult } = require('express-validator');
 
 const Op = db.Sequelize.Op;
 const Ticket = db.tickets;
 
 exports.createTicket = async (req, res) => {
-    // Create a Ticket
-    const ticket = {
-        title: req.body.title,
-        description: req.body.description,
-        status: req.body.status,
-        converter_id: req.body.converter_id,
-        customer_id: req.body.customer_id,
-        company_id: req.body.company_id,
-    };
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { title, description, status, converter_id } = req.body;
+
+    const ticket = { title, description, status, converter_id };
 
     // Save Ticket in the database
     Ticket.create(ticket)
@@ -29,8 +29,9 @@ exports.createTicket = async (req, res) => {
 
 exports.getTickets = async (req, res) => {
     const search = req.query.q;
+    console.log(search);
     var condition = search ? {
-        [Op.and]: [
+        [Op.or]: [
             { title: { [Op.iLike]: `%${search}%` } },
             { description: { [Op.iLike]: `%${search}%` } }
         ]
@@ -115,3 +116,10 @@ exports.deleteTicket = async (req, res) => {
             });
         });
 }
+
+exports.ticketValidations = [
+    check('title', 'Title is required').not().isEmpty(),
+    check('description', 'Description is required').not().isEmpty(),
+    check('status', 'Status is required').not().isEmpty(),
+    check('converter_id', 'Converter id is required').not().isEmpty(),
+];

@@ -1,15 +1,20 @@
 const db = require('../models/model');
+const { check, validationResult } = require('express-validator');
 
 const Op = db.Sequelize.Op;
 const Event = db.events;
 
 exports.createEvent = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
     // Create a Event
     const event = {
         converter_id: req.body.converter_id,
-        event_type: req.body.event_type,
-        event_data: req.body.event_data,
+        level: req.body.level,
+        message: req.body.message,
     };
 
     // Save Event in the database
@@ -27,7 +32,7 @@ exports.createEvent = async (req, res) => {
 
 exports.getEvents = async (req, res) => {
     const search = req.query.q;
-    var condition = search ? { event_data: { [Op.iLike]: `%${search}%` } } : null;
+    var condition = search ? { message: { [Op.iLike]: `%${search}%` } } : null;
 
     Event.findAll({ where: condition })
         .then(data => {
@@ -108,3 +113,9 @@ exports.deleteEvent = async (req, res) => {
             });
         });
 }
+
+exports.eventValidations = [
+    check('converter_id', 'Converter id is required').not().isEmpty(),
+    check('message', 'Message is required').not().isEmpty(),
+    check('level', 'Level is required').not().isEmpty(),
+];
