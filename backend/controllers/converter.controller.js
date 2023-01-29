@@ -1,10 +1,17 @@
 const db = require('../models/model');
+const { check, validationResult } = require('express-validator');
 
 const Op = db.Sequelize.Op;
 const Converter = db.converters;
 
 exports.createConverter = async (req, res) => {
-    const { brand, serial_number, status, company_id, customer_id } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { brand, description, serial_number, status, company_id, user_id } = req.body;
+
     const converteryExists = await Converter.findOne({ where: { serial_number: serial_number } });
     if (converteryExists) {
         return res.status(400).json({ error: "Converter already exists" });
@@ -12,12 +19,13 @@ exports.createConverter = async (req, res) => {
 
     // Create a converter
     const converter = {
-        brand: brand,
+        brand,
+        description,
         photo: (req.file !== undefined ? "/uploads/" + req.file.filename : null),
-        serial_number: serial_number,
-        status: status,
-        company_id: company_id,
-        customer_id: customer_id,
+        serial_number,
+        status,
+        company_id,
+        user_id,
     };
 
     // Save Converter in the database
@@ -33,11 +41,12 @@ exports.createConverter = async (req, res) => {
         });
 }
 
-exports.getConverters = async (req, res) => {
+exports.getConverters = (req, res) => {
     const search = req.query.q;
     var condition = search ? {
         [Op.and]: [
             { brand: { [Op.iLike]: `%${search}%` } },
+            { description: { [Op.iLike]: `%${search}%` } },
             { serial_number: { [Op.iLike]: `%${search}%` } }
         ]
     } : null;
@@ -54,7 +63,7 @@ exports.getConverters = async (req, res) => {
         });
 }
 
-exports.getConverterById = async (req, res) => {
+exports.getConverterById = (req, res) => {
     const id = req.params.id;
 
     Converter.findByPk(id)
@@ -74,8 +83,12 @@ exports.getConverterById = async (req, res) => {
         });
 }
 
-exports.updateConverter = async (req, res) => {
+exports.updateConverter = (req, res) => {
     const id = req.params.id;
+
+    if (req.file) {
+        req.body.photo = "/uploads/" + req.file.filename;
+    }
 
     Converter.update(req.body, {
         where: { id: id }
@@ -98,7 +111,7 @@ exports.updateConverter = async (req, res) => {
         });
 }
 
-exports.deleteConverter = async (req, res) => {
+exports.deleteConverter = (req, res) => {
     const id = req.params.id;
 
     Converter.destroy({
@@ -121,3 +134,11 @@ exports.deleteConverter = async (req, res) => {
             });
         });
 }
+
+
+exports.converterValidations = [
+    check('brand', 'Brand is required').not().isEmpty(),
+    check('serial_number', 'Serial number is required').not().isEmpty(),
+    check('status', 'Status is required').not().isEmpty(),
+    check('company_id', 'Company id is required').not().isEmpty(),
+];

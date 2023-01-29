@@ -1,6 +1,6 @@
-//customer model
+//user model
 module.exports = (sequelize, DataTypes) => {
-    const Customer = sequelize.define("customer", {
+    const User = sequelize.define("User", {
         first_name: {
             type: DataTypes.STRING,
             allowNull: false
@@ -35,15 +35,19 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
+        role: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        }
     }, {
         timestamps: true,
         underscored: true
     });
 
-    Customer.associate = function (models) {
-        Company.hasMany(models.Converter, { foreignKey: 'customer_id', as: 'converters' })
-        Customer.hasOne(models.UserRole, { foreignKey: 'user_id', as: 'role' })
+    User.associate = function (models) {
+        User.hasMany(models.Converter, { foreignKey: 'user_id', as: 'converters' })
+        User.hasOne(models.Company, { foreignKey: 'user_id', as: 'company' })
     };
 
-    return Customer
+    return User
 }

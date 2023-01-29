@@ -32,21 +32,21 @@ module.exports = app => {
 
     // Authentication Routing
     router.post('/signin', auth.singin);
-    router.post('/signup', photoFile.single('avatar'), auth.singup);
-    router.post('/updateProfile', auth_middleware, auth.updateProfile);
+    router.post('/signup', photoFile.single('avatar'), auth.signupValidations, auth.signup);
+    router.post('/updateProfile', photoFile.single('avatar'), auth_middleware, auth.updateProfile);
 
     // Company routes
-    router.post("/companies", company.createCompany);
-    router.get("/companies", /*auth_middleware,*/ company.getCompanies);
+    router.post("/companies", photoFile.single('photo'), company.companyValidations, company.createCompany);
+    router.get("/companies", company.getCompanies);
     router.get("/companies/:id", company.getCompanyById);
-    router.put("/companies/:id", company.updateCompany);
+    router.put("/companies/:id", photoFile.single('photo'), company.updateCompany);
     router.delete("/companies/:id", company.deleteCompany);
 
     // Converter routes
-    router.post("/converters", photoFile.single('photo'), converter.createConverter);
+    router.post("/converters", photoFile.single('photo'), converter.converterValidations, converter.createConverter);
     router.get("/converters", converter.getConverters);
     router.get("/converters/:id", converter.getConverterById);
-    router.put("/converters/:id", converter.updateConverter);
+    router.put("/converters/:id", photoFile.single('photo'), converter.updateConverter);
     router.delete("/converters/:id", converter.deleteConverter);
 
     // Customer routes

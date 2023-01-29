@@ -5,17 +5,22 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
-        event_type: {
+        message: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        event_data: {
+        level: {
             type: DataTypes.TEXT,
             allowNull: false
         },
     }, {
         timestamps: true,
         underscored: true
-    })
+    });
+
+    Event.associate = function (models) {
+        Event.belongsTo(models.Converter, { foreignKey: 'converter_id', as: 'converter' });
+    };
+
     return Event
 }

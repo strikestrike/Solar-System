@@ -1,24 +1,29 @@
 const db = require('../models/model');
 const bcrypt = require('bcrypt');
+const { check, validationResult } = require('express-validator');
 
 const Op = db.Sequelize.Op;
 const Company = db.companies;
 
 exports.createCompany = async (req, res) => {
-    const { name, email, phone, password, company_admin } = req.body;
-    const companyExists = await Company.findOne({ where: { email: email } });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { photo, name, description, admin } = req.body;
+
+    const companyExists = await Company.findOne({ where: { name: name } });
     if (companyExists) {
         return res.status(400).json({ error: "Company already exists" });
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create a company
     const company = {
-        name: name,
-        email: email,
-        phone: phone,
-        password: hashedPassword,
-        company_admin: company_admin ? company_admin : false,
+        photo: (req.file !== undefined ? "/uploads/" + req.file.filename : null),
+        name,
+        description,
+        admin: (admin ? admin : null),
     };
 
     // Save Company in the database
@@ -39,7 +44,7 @@ exports.getCompanies = async (req, res) => {
     var condition = search ? {
         [Op.and]: [
             { name: { [Op.iLike]: `%${search}%` } },
-            { email: { [Op.iLike]: `%${search}%` } }
+            { description: { [Op.iLike]: `%${search}%` } }
         ]
     } : null;
 
@@ -78,6 +83,10 @@ exports.getCompanyById = async (req, res) => {
 
 exports.updateCompany = async (req, res) => {
     const id = req.params.id;
+
+    if (req.file) {
+        req.body.photo = "/uploads/" + req.file.filename;
+    }
 
     Company.update(req.body, {
         where: { id: id }
@@ -123,3 +132,7 @@ exports.deleteCompany = async (req, res) => {
             });
         });
 }
+
+exports.companyValidations = [
+    check('name', 'name is required').not().isEmpty()
+];

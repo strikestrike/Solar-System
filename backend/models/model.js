@@ -19,13 +19,12 @@ db.Sequelize = Sequelize
 db.sequelize = sequelize
 
 //connecting to model
+db.users = require('./user.model')(sequelize, DataTypes)
 db.companies = require('./company.model')(sequelize, DataTypes)
 db.converters = require('./converter.model')(sequelize, DataTypes)
-db.customers = require('./customer.model')(sequelize, DataTypes)
 db.events = require('./event.model')(sequelize, DataTypes)
 db.throughputs = require('./throughput.model')(sequelize, DataTypes)
 db.tickets = require('./ticket.model')(sequelize, DataTypes)
-db.user_role = require('./user_role.model')(sequelize, DataTypes)
 
 //exporting the module
 module.exports = db

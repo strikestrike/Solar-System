@@ -1,147 +1,100 @@
 const db = require('../models/model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const { check, validationResult } = require('express-validator');
 
-const Customer = db.customers;
-const Company = db.companies;
-const UserRole = db.user_role;
+const User = db.users;
 
 exports.singin = async (req, res) => {
     try {
-        const { email, password } = req.body;
-        const customer = await Customer.findOne({ where: { email: email } });
-        const company = await Company.findOne({ where: { email: email } });
-        if (!customer && !company) {
-            return res.status(401).json({ error: "Invalid email or password" });
+        // Find the user by email
+        const user = await User.findOne({ where: { email: req.body.email } });
+
+        // If user not found, return error
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid email or password' });
         }
-        var user = customer || company;
-        const isSame = await bcrypt.compare(password, user.password);
-        if (!isSame) {
-            return res.status(401).json({ error: "Invalid email or password" });
+
+        // Compare passwords
+        const isMatch = await bcrypt.compare(req.body.password, user.password);
+
+        // If passwords do not match, return error
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Invalid email or password' });
         }
-        const role = await UserRole.findOne({ where: { user_id: user.id } });
-        const token = jwt.sign({ id: user.id, role: role.role, email: user.email }, process.env.secretKey, {
-            expiresIn: 1 * 24 * 60 * 60 * 1000
+
+        // Sign the JWT token
+        const token = jwt.sign({ id: user.id }, process.env.secretKey, { expiresIn: '1h' });
+
+        // Return the token and user information
+        return res.json({ token, user });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
+exports.signup = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).send({ errors: errors.array() });
+    }
+
+    try {
+        const { first_name, last_name, address, birthday, email, phone, password } = req.body;
+
+        const existingUser = await User.findOne({ where: { email: email } });
+        if (existingUser) {
+            return res.status(400).send({ error: 'Email already in use' });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const user = await User.create({
+            first_name,
+            last_name,
+            address,
+            birthday,
+            avatar: (req.file !== undefined ? "/uploads/" + req.file.filename : null),
+            email,
+            phone,
+            password: hashedPassword,
+            company_id: 0,
+            role: constant.ROLE_CUSTOMER
         });
 
-        user.setDataValue('role', role.role);
-        user.setDataValue('token', token);
+        const token = jwt.sign({ id: user.id }, process.env.secretKey, { expiresIn: '1h' });
 
-        res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-        return res.status(200).json({ message: "Logged in successfully", user: user });
+        return res.status(201).send({ token, user });
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({ error: "Server error" });
+        return res.status(400).send({ error: error.message });
     }
 }
 
-
-exports.singup = async (req, res) => {
-    try {
-        const { first_name, last_name, address, birthday, email, phone, password, role, company_id } = req.body;
-        const userExists = await Customer.findOne({ where: { email: email } });
-        const companyExists = await Company.findOne({ where: { email: email } });
-        if (userExists || companyExists) {
-            return res.status(400).json({ error: "User already exists" });
-        }
-        const hashedPassword = await bcrypt.hash(password, 10);
-        if (role === "customer") {
-            const customer = await Customer.create({
-                first_name,
-                last_name,
-                address,
-                birthday,
-                avatar: (req.file !== undefined ? "/uploads/" + req.file.filename : null),
-                email,
-                phone,
-                password: hashedPassword,
-                company_id
-            });
-            const user_role = await UserRole.create({
-                role,
-                user_id: customer.id
-            });
-            const token = jwt.sign({ id: customer.id, role: customer.role, email: customer.email }, process.env.secretKey, {
-                expiresIn: 1 * 24 * 60 * 60 * 1000
-            });
-
-            customer.setDataValue('role', user_role.role);
-            customer.setDataValue('token', token);
-
-            return res.status(201).json({ message: "Customer created successfully", user: customer });
-        } else if (role === "company_admin") {
-            const company = await Company.create({
-                first_name,
-                last_name,
-                address,
-                birthday,
-                avatar: (req.file !== undefined ? "/uploads/" + req.file.filename : null),
-                email,
-                phone,
-                password: hashedPassword,
-                company_admin: true
-            });
-            const user_role = await UserRole.create({
-                role,
-                user_id: company.id
-            });
-
-            const token = jwt.sign({ id: company.id, role: company.role, email: company.email }, process.env.secretKey, {
-                expiresIn: 1 * 24 * 60 * 60 * 1000
-            });
-
-            company.setDataValue('role', user_role.role);
-            company.setDataValue('token', token);
-
-            return res.status(201).json({ message: "Company admin created successfully", user: company });
-        } else {
-            return res.status(401).json({ error: "Invalid role" });
-        }
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ error: "Server error" });
-    }
-}
+exports.signupValidations = [
+    check('first_name').not().isEmpty().withMessage('First name is required'),
+    // check('email').isEmail().withMessage('Invalid email address'),
+    // check('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
+];
 
 
 exports.updateProfile = async (req, res) => {
     try {
-        const { first_name, last_name, email, password, password_repeat } = req.body;
-        var user = req.user;
-        console.log(user);
-
-        if (user.email != "email") {
-            const userExists = await Customer.findOne({ where: { email: email } });
-            const companyExists = await Company.findOne({ where: { email: email } });
-            if (userExists || companyExists) {
-                return res.status(400).json({ error: "User already exists" });
-            }
+        const user = await User.findByPk(req.user.id);
+        if (!user) {
+            return res.status(404).json({ msg: 'User not found' });
         }
-
-        if (user.role == "customer") {
-            const customer = await Customer.findByPk(user.id);
-            customer.first_name = first_name;
-            customer.last_name = last_name;
-            customer.email = email;
-            customer.password = await bcrypt.hash(password, 10);
-            customer.save();
-        } else if (user.role == "company_admin") {
-            const company = await Company.findByPk(user.id);
-            company.first_name = first_name;
-            company.last_name = last_name;
-            company.email = email;
-            company.password = await bcrypt.hash(password, 10);
-            company.save();
-        }
-
-        user.email = email;
-        user.first_name = first_name;
-        user.last_name = last_name;
-
-        return res.status(201).json({ message: "Profile updated successfully", user: user });
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({ error: "Server error" });
+        const updateFields = {};
+        if (req.body.first_name) updateFields.first_name = req.body.first_name;
+        if (req.body.last_name) updateFields.last_name = req.body.last_name;
+        if (req.body.address) updateFields.address = req.body.address;
+        if (req.body.birthday) updateFields.birthday = req.body.birthday;
+        if (req.file) updateFields.avatar = "/uploads/" + req.file.filename;
+        await user.update(updateFields);
+        return res.status(200).json({ msg: 'User updated successfully' });
+    } catch (err) {
+        console.error(err.message);
+        return res.status(500).send('Server error');
     }
 }

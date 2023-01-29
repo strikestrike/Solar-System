@@ -12,6 +12,11 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         timestamps: true,
         underscored: true
-    })
+    });
+
+    Throughput.associate = function (models) {
+        Throughput.belongsTo(models.Converter, { foreignKey: 'converter_id', as: 'converter' });
+    };
+
     return Throughput
 }
