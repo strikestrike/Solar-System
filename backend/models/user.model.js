@@ -33,7 +33,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         company_id: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: 'companies',
+                key: 'id'
+            }
         },
         role: {
             type: DataTypes.INTEGER,

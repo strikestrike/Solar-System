@@ -15,7 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         converter_id: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: 'converters',
+                key: 'id'
+            }
         }
     }, {
         timestamps: true,
@@ -23,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Ticket.associate = function (models) {
-        Converter.belongsTo(models.Converter, { foreignKey: 'converter_id', as: 'company' });
+        Ticket.belongsTo(models.Converter, { foreignKey: 'converter_id', as: 'company' });
     };
 
     return Ticket
