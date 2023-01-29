@@ -1,42 +1,14 @@
 <script>
     import {onMount} from 'svelte';
 
-    export let showConfirm = false;
     export let confirmText;
-    export let confirmOkText;
-
-    let showConfirmWatch;
-
-    let confirmModal = null;
-
-    onMount(() => {
-        confirmModal = new bootstrap.Modal('#myModal', {
-            backdrop: 'static',
-            keyboard: false
-        });
-
-        showConfirmWatch = showConfirm;
-        console.log(showConfirmWatch);
-    });
-
-    $: if(showConfirmWatch !== showConfirm) {
-        showConfirmWatch = showConfirm;
-        //call your function here
-        showConfirmModal();
-    }
-
-    function showConfirmModal(){
-        if(showConfirmWatch && confirmModal){
-            confirmModal.show();
-        }
-    }
 
 </script>
 
-{showConfirm}
+<button class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#myModal" id="btn-confirm-modal"></button>
 
 <!-- The Modal -->
-<div class="modal fade" id="myModal">
+<div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -53,8 +25,8 @@
 
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">{confirmOkText}</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancle</button>
+                <button type="button" class="btn btn-primary">Yes</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
             </div>
 
         </div>

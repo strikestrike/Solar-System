@@ -15,17 +15,19 @@
 	let showModal;
 	let showConfirm = false;
 	let confirmText;
-	let confirmOkText;
 
 	onMount(() => {
 
 	});
 
 	function clickDeleteCustomer(){
-		showConfirm = true;
-
 		confirmText = 'Are you sure you want to delete this customer?';
-		confirmOkText = 'Yes';
+
+		controlConfirm();
+	}
+
+	function controlConfirm(){
+		document.getElementById("btn-confirm-modal").click();
 	}
 
 </script>
@@ -77,7 +79,7 @@
 	<title>Customers | ProfitFLow</title>
 </svelte:head>
 
-<Modal {showConfirm}  />
+<Modal {confirmText}  />
 
 <div class="home-page">
 	<div class="search-bar container">

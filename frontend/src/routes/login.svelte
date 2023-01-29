@@ -42,7 +42,7 @@
 
 <div class="auth-page container-fluid">
     <div class="row">
-        <div class="col-xs-7">
+        <div class="col-7">
             <div>
                 <h1>Welcome to ProfitFlow</h1>
             </div>
@@ -68,7 +68,7 @@
                 </div>
 
                 <form on:submit|preventDefault="{handleLogin}" method="post">
-                    <fieldset class="form-group">
+                    <fieldset class="form-group mb-3">
                         <label>
                             <i class="far fa-user-circle"></i>
                         </label>
@@ -80,7 +80,7 @@
                                 placeholder="Email" bind:value={email}
                         />
                     </fieldset>
-                    <fieldset class="form-group">
+                    <fieldset class="form-group mb-3">
                         <label>
                             <i class="fas fa-lock"></i>
                         </label>
@@ -132,7 +132,7 @@
     div.auth-page>div.row>div:nth-child(1)>div:nth-child(1){margin-bottom: 40px;}
     div.auth-page>div.row>div:nth-child(1)>div:nth-child(2){font-size: 20px;}
     div.auth-page>div.row>div:nth-child(3)>div>div:nth-child(1){margin-bottom: 40px}
-    div.auth-page>div.row>div:nth-child(3){flex-grow: 1;}
+    div.auth-page>div.row>div:nth-child(3){flex: 1;}
     div.auth-page>div.row>div:nth-child(3)>div>div:nth-child(1){}
     div.auth-page>div.row>div:nth-child(3) div.btn-group{
         display: flex;
