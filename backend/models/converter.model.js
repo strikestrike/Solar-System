@@ -21,10 +21,18 @@ module.exports = (sequelize, DataTypes) => {
         },
         company_id: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: 'companies',
+                key: 'id'
+            }
         },
         user_id: {
             type: DataTypes.INTEGER,
+            references: {
+                model: 'users',
+                key: 'id'
+            }
         },
     }, {
         timestamps: true,

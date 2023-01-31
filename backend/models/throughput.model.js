@@ -2,8 +2,12 @@
 module.exports = (sequelize, DataTypes) => {
     const Throughput = sequelize.define("throughput", {
         converter_id: {
-            type: DataTypes.STRING,
-            allowNull: false
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'converters',
+                key: 'id'
+            }
         },
         expected_throughput: {
             type: DataTypes.FLOAT,

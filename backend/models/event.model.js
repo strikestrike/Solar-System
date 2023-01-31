@@ -3,14 +3,18 @@ module.exports = (sequelize, DataTypes) => {
     const Event = sequelize.define("event", {
         converter_id: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: 'converters',
+                key: 'id'
+            }
         },
         message: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false
         },
         level: {
-            type: DataTypes.TEXT,
+            type: DataTypes.STRING,
             allowNull: false
         },
     }, {

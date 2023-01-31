@@ -42,7 +42,7 @@ exports.createCompany = async (req, res) => {
 exports.getCompanies = async (req, res) => {
     const search = req.query.q;
     var condition = search ? {
-        [Op.and]: [
+        [Op.or]: [
             { name: { [Op.iLike]: `%${search}%` } },
             { description: { [Op.iLike]: `%${search}%` } }
         ]
@@ -86,6 +86,10 @@ exports.updateCompany = async (req, res) => {
 
     if (req.file) {
         req.body.photo = "/uploads/" + req.file.filename;
+    }
+
+    if (!req.body.admin) {
+        req.body.admin = null;
     }
 
     Company.update(req.body, {
