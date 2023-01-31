@@ -12,7 +12,7 @@ exports.createTicket = async (req, res) => {
 
     const { problem, level, converter_id } = req.body;
 
-    const ticket = { ticket_no: 1, problem, level, converter_id };
+    const ticket = { problem, level, converter_id };
 
     // Save Ticket in the database
     Ticket.create(ticket)
