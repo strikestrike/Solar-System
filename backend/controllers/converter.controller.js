@@ -10,7 +10,7 @@ exports.createConverter = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, serial_number, status, company_id, user_id } = req.body;
+    const { name, description, serial_number, status, company_id, user_id } = req.body;
 
     const converteryExists = await Converter.findOne({ where: { name: name, serial_number: serial_number } });
     if (converteryExists) {
@@ -20,6 +20,7 @@ exports.createConverter = async (req, res) => {
     // Create a converter
     const converter = {
         name,
+        description,
         photo: (req.file !== undefined ? "/uploads/" + req.file.filename : null),
         serial_number,
         status,
