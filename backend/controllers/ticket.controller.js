@@ -28,16 +28,22 @@ exports.createTicket = async (req, res) => {
 }
 
 exports.getTickets = async (req, res) => {
+    var conditions = [];
     const search = req.query.q;
-    console.log(search);
-    var condition = search ? {
-        [Op.or]: [
-            { title: { [Op.iLike]: `%${search}%` } },
-            { description: { [Op.iLike]: `%${search}%` } }
-        ]
-    } : null;
+    if (search) {
+        conditions.push({
+            [Op.or]: [
+                { title: { [Op.iLike]: `%${search}%` } },
+                { description: { [Op.iLike]: `%${search}%` } }
+            ]
+        });
+    }
 
-    Ticket.findAll({ where: condition })
+    if (req.params.converterId) {
+        conditions.push({ converter_id: req.params.converterId });
+    }
+
+    Ticket.findAll({ where: { [Op.and]: conditions } })
         .then(data => {
             res.send(data);
         })

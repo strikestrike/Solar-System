@@ -42,16 +42,27 @@ exports.createConverter = async (req, res) => {
 }
 
 exports.getConverters = (req, res) => {
+    var conditions = [];
     const search = req.query.q;
-    var condition = search ? {
-        [Op.or]: [
-            { brand: { [Op.iLike]: `%${search}%` } },
-            { description: { [Op.iLike]: `%${search}%` } },
-            { serial_number: { [Op.iLike]: `%${search}%` } }
-        ]
-    } : null;
+    if (search) {
+        conditions.push({
+            [Op.or]: [
+                { brand: { [Op.iLike]: `%${search}%` } },
+                { description: { [Op.iLike]: `%${search}%` } },
+                { serial_number: { [Op.iLike]: `%${search}%` } }
+            ]
+        });
+    }
 
-    Converter.findAll({ where: condition })
+    if (req.params.userId) {
+        conditions.push({ user_id: req.params.userId });
+    }
+
+    if (req.params.companyId) {
+        conditions.push({ company_id: req.params.companyId });
+    }
+
+    Converter.findAll({ where: { [Op.and]: conditions } })
         .then(data => {
             res.send(data);
         })

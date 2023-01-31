@@ -31,10 +31,17 @@ exports.createEvent = async (req, res) => {
 }
 
 exports.getEvents = async (req, res) => {
+    var conditions = [];
     const search = req.query.q;
-    var condition = search ? { message: { [Op.iLike]: `%${search}%` } } : null;
+    if (search) {
+        conditions.push({ message: { [Op.iLike]: `%${search}%` } });
+    }
 
-    Event.findAll({ where: condition })
+    if (req.params.converterId) {
+        conditions.push({ converter_id: req.params.converterId });
+    }
+
+    Event.findAll({ where: { [Op.and]: conditions } })
         .then(data => {
             res.send(data);
         })

@@ -24,7 +24,7 @@ exports.singin = async (req, res) => {
         }
 
         // Sign the JWT token
-        const token = jwt.sign({ id: user.id }, process.env.secretKey, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, role: user.role, company_id: user.company_id }, process.env.secretKey, { expiresIn: '1h' });
 
         // Return the token and user information
         return res.json({ token, user });
@@ -60,11 +60,10 @@ exports.signup = async (req, res) => {
             email,
             phone,
             password: hashedPassword,
-            company_id: 0,
             role: constant.ROLE_CUSTOMER
         });
 
-        const token = jwt.sign({ id: user.id }, process.env.secretKey, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, role: user.role, company_id: user.company_id }, process.env.secretKey, { expiresIn: '1h' });
 
         return res.status(201).send({ token, user });
     } catch (error) {
@@ -97,4 +96,24 @@ exports.updateProfile = async (req, res) => {
         console.error(err.message);
         return res.status(500).send('Server error');
     }
+}
+
+exports.getProfile = async (req, res) => {
+    const id = req.user.id;
+
+    User.findByPk(id)
+        .then(data => {
+            if (data) {
+                res.send(data);
+            } else {
+                res.status(404).send({
+                    message: `Cannot find User with id=${id}.`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error retrieving Company with id=" + id
+            });
+        });
 }

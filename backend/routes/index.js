@@ -36,11 +36,13 @@ module.exports = app => {
     // Authentication Routing
     router.post('/signin', auth.singin);
     router.post('/signup', photoFile.single('avatar'), auth.signupValidations, auth.signup);
-    router.post('/updateProfile', photoFile.single('avatar'), auth_middleware, auth.updateProfile);
+    router.put('/profile', photoFile.single('avatar'), auth_middleware, auth.updateProfile);
+    router.get('/profile', auth_middleware, auth.getProfile);
 
     // User routes
     router.post("/users", photoFile.single('avatar'), user.userValidations, user.createUser);
     router.get("/users", user.getUsers);
+    router.get("/companies/:companyId/users", user.getUsers);
     router.get("/users/:id", user.getUserById);
     router.put("/users/:id", photoFile.single('avatar'), user.updateUser);
     router.delete("/users/:id", user.deleteUser);
@@ -55,6 +57,8 @@ module.exports = app => {
     // Converter routes
     router.post("/converters", photoFile.single('photo'), converter.converterValidations, converter.createConverter);
     router.get("/converters", converter.getConverters);
+    router.get("/users/:userId/converters", converter.getConverters);
+    router.get("/companies/:companyId/converters", converter.getConverters);
     router.get("/converters/:id", converter.getConverterById);
     router.put("/converters/:id", photoFile.single('photo'), converter.updateConverter);
     router.delete("/converters/:id", converter.deleteConverter);
@@ -69,6 +73,7 @@ module.exports = app => {
     // Event routes
     router.post("/events", event.eventValidations, event.createEvent);
     router.get("/events", event.getEvents);
+    router.get("/converters/:converterId/events", event.getEvents);
     router.get("/events/:id", event.getEventById);
     router.put("/events/:id", event.updateEvent);
     router.delete("/events/:id", event.deleteEvent);
@@ -83,6 +88,7 @@ module.exports = app => {
     // Ticket routes
     router.post("/tickets", ticket.ticketValidations, ticket.createTicket);
     router.get("/tickets", ticket.getTickets);
+    router.get("/converters/:converterId/tickets", ticket.getTickets);
     router.get("/tickets/:id", ticket.getTicketById);
     router.put("/tickets/:id", ticket.updateTicket);
     router.delete("/tickets/:id", ticket.deleteTicket);

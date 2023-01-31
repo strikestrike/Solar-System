@@ -44,18 +44,25 @@ exports.createUser = async (req, res) => {
 }
 
 exports.getUsers = async (req, res) => {
+    var conditions = [];
     const search = req.query.q;
-    var condition = search ? {
-        [Op.or]: [
-            { first_name: { [Op.iLike]: `%${search}%` } },
-            { last_name: { [Op.iLike]: `%${search}%` } },
-            { address: { [Op.iLike]: `%${search}%` } },
-            { email: { [Op.iLike]: `%${search}%` } },
-            { phone: { [Op.iLike]: `%${search}%` } },
-        ]
-    } : null;
+    if (search) {
+        conditions.push({
+            [Op.or]: [
+                { first_name: { [Op.iLike]: `%${search}%` } },
+                { last_name: { [Op.iLike]: `%${search}%` } },
+                { address: { [Op.iLike]: `%${search}%` } },
+                { email: { [Op.iLike]: `%${search}%` } },
+                { phone: { [Op.iLike]: `%${search}%` } },
+            ]
+        });
+    }
 
-    User.findAll({ where: condition })
+    if (req.params.companyId) {
+        conditions.push({ company_id: req.params.companyId });
+    }
+
+    User.findAll({ where: { [Op.and]: conditions } })
         .then(data => {
             res.send(data);
         })
@@ -69,7 +76,6 @@ exports.getUsers = async (req, res) => {
 
 exports.getUserById = async (req, res) => {
     const id = req.params.id;
-    console.log(id);
 
     User.findByPk(id)
         .then(data => {
