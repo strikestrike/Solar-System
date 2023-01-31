@@ -23,7 +23,7 @@ db.User = require('./user.model')(sequelize, DataTypes)
 db.Company = require('./company.model')(sequelize, DataTypes)
 db.Converter = require('./converter.model')(sequelize, DataTypes)
 db.Event = require('./event.model')(sequelize, DataTypes)
-db.Throughput = require('./throughput.model')(sequelize, DataTypes)
+// db.Throughput = require('./throughput.model')(sequelize, DataTypes)
 db.Ticket = require('./ticket.model')(sequelize, DataTypes)
 
 Object.keys(db).forEach(modelName => {

@@ -3,7 +3,7 @@ const { check, validationResult } = require('express-validator');
 
 const Op = db.Sequelize.Op;
 const Converter = db.Converter;
-const Throughput = db.Throughput;
+// const Throughput = db.Throughput;
 
 exports.createConverter = async (req, res) => {
     const errors = validationResult(req);
@@ -11,7 +11,7 @@ exports.createConverter = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, description, serial_number, status, company_id, user_id } = req.body;
+    const { name, description, serial_number, status, expected_throughput, company_id, user_id } = req.body;
 
     const converteryExists = await Converter.findOne({ where: { name: name, serial_number: serial_number } });
     if (converteryExists) {
@@ -25,6 +25,7 @@ exports.createConverter = async (req, res) => {
         photo: (req.file !== undefined ? "/uploads/" + req.file.filename : null),
         serial_number,
         status,
+        expected_throughput,
         company_id,
         user_id,
     };
@@ -64,16 +65,16 @@ exports.getConverters = (req, res) => {
 
     Converter.findAll({
         where: { [Op.and]: conditions },
-        include: [
-            {
-                association: 'throughputs',
-                attributes: ['expected_throughput'],
-                order: [['created_at', 'DESC']],
-                limit: 1,
-                required: true,
-                duplicating: false,
-            },
-        ],
+        // include: [
+        //     {
+        //         association: 'throughputs',
+        //         attributes: ['expected_throughput'],
+        //         order: [['created_at', 'DESC']],
+        //         limit: 1,
+        //         required: true,
+        //         duplicating: false,
+        //     },
+        // ],
     })
         .then(data => {
             res.send(data);
@@ -163,5 +164,6 @@ exports.converterValidations = [
     check('name', 'Name is required').not().isEmpty(),
     check('serial_number', 'Serial number is required').not().isEmpty(),
     check('status', 'Status is required').not().isEmpty(),
+    check('expected_throughput', 'Expected throughput is required').not().isEmpty(),
     check('company_id', 'Company id is required').not().isEmpty(),
 ];

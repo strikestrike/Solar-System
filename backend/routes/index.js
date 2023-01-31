@@ -30,7 +30,7 @@ module.exports = app => {
     const converter = require('../controllers/converter.controller');
     const customer = require('../controllers/customer.controller');
     const event = require('../controllers/event.controller');
-    const throughput = require('../controllers/throughput.controller');
+    // const throughput = require('../controllers/throughput.controller');
     const ticket = require('../controllers/ticket.controller');
 
     // Authentication Routing
@@ -79,11 +79,11 @@ module.exports = app => {
     router.delete("/events/:id", event.deleteEvent);
 
     // Throughput routes
-    router.post("/throughputs", throughput.throughputValidations, throughput.createThroughput);
-    router.get("/throughputs", throughput.getThroughputs);
-    router.get("/throughputs/:id", throughput.getThroughputById);
-    router.put("/throughputs/:id", throughput.updateThroughput);
-    router.delete("/throughputs/:id", throughput.deleteThroughput);
+    // router.post("/throughputs", throughput.throughputValidations, throughput.createThroughput);
+    // router.get("/throughputs", throughput.getThroughputs);
+    // router.get("/throughputs/:id", throughput.getThroughputById);
+    // router.put("/throughputs/:id", throughput.updateThroughput);
+    // router.delete("/throughputs/:id", throughput.deleteThroughput);
 
     // Ticket routes
     router.post("/tickets", ticket.ticketValidations, ticket.createTicket);
