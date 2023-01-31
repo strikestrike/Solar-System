@@ -20,7 +20,7 @@
 </script>
 
 <style>
-	main{min-height: calc(100vh - 300px);}
+	main{min-height: calc(100vh - 260px);}
 </style>
 
 <Nav {segment} {isLogin} {role} />

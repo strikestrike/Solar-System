@@ -51,11 +51,10 @@
 	}
 
 	div.home-page>div.container{
-		margin-top: 40px;
 	}
 
 	div.search-bar{
-		padding: 20px 0 10px 0;
+		padding: 60px 0 10px 0;
 		border-bottom: 1px #e5e5e5 solid;
 	}
 	div.search-bar>div{display: flex;justify-content: flex-end;}

@@ -2,6 +2,7 @@
     import {onMount} from 'svelte';
 
     export let confirmText;
+    export let confirmYesEvent;
 
 </script>
 
@@ -25,7 +26,7 @@
 
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Yes</button>
+                <button type="button" class="btn btn-primary" on:click={confirmYesEvent}>Yes</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
             </div>
 

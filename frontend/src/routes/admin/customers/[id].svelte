@@ -32,11 +32,10 @@
 	}
 
 	div.home-page>div.container{
-		margin-top: 40px;
 	}
 
 	div.search-bar{
-		padding: 20px 0 10px 0;
+		padding: 60px 0 10px 0;
 		border-bottom: 1px #e5e5e5 solid;
 		display: flex;
 		justify-content: space-between;

@@ -5,6 +5,8 @@ import * as sapper from '@sapper/server';
 import { json } from 'body-parser';
 import session from 'express-session';
 import sessionFileStore from 'session-file-store';
+// middleware
+import authMiddleware from "./middleware/auth";
 
 
 const { PORT, NODE_ENV } = process.env;
@@ -28,6 +30,7 @@ polka() // You can also use Express
 		}),
 		compression({ threshold: 0 }),
 		sirv('static', { dev }),
+		authMiddleware,
 		sapper.middleware({
 			session: (req, res) => {
 				return ({

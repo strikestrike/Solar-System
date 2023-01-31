@@ -84,7 +84,7 @@
 				<li><a rel=prefetch aria-current="{segment === 'settings' ? 'page' : undefined}" href="/settings">Settings</a></li>
 				<li><a rel=prefetch href="/logout">logout</a></li>
 			{:else }
-				<li><a rel=prefetch aria-current="{segment === 'login' ? 'page' : undefined}" href="login">Login</a></li>
+				<li><a rel=prefetch aria-current="{segment === 'login' ? 'page' : undefined}" href="/login">Login</a></li>
 			{/if}
 
 		</ul>

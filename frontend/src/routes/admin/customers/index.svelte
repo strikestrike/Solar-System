@@ -15,6 +15,7 @@
 <script>
 	import {onMount} from 'svelte';
 	import Modal from "../../../components/Modal.svelte";
+	import axios from "axios";
 
 	export let posts;
 
@@ -26,8 +27,10 @@
 
 	});
 
-	function clickDeleteCustomer(){
+	function clickDeleteCustomer(id){
 		confirmText = 'Are you sure you want to delete this customer?';
+
+		localStorage.setItem('currentCustomerId', id);
 
 		controlConfirm();
 	}
@@ -40,7 +43,23 @@
 		localStorage.setItem('currentCustomerName', name);
 	}
 
-</script>
+	function deleteAction(){
+		let id = localStorage.getItem('currentCustomerId');
+
+		axios.delete('http://localhost:8080/api/users/' + id)
+				.then(response => {
+					// handle success
+					// console.log(response.data)
+					console.log(response.data);
+				})
+				.catch(error => {
+					console.log(error);
+				});
+
+		toastr.success("Success message");
+	}
+
+;</script>
 
 <style>
 	#svg-user-search{
@@ -49,11 +68,10 @@
 	}
 
 	div.home-page>div.container{
-		margin-top: 40px;
 	}
 
 	div.search-bar{
-		padding: 20px 0 10px 0;
+		padding: 60px 0 10px 0;
 		border-bottom: 1px #e5e5e5 solid;
 		display: flex;
 		justify-content: space-between;
@@ -89,7 +107,7 @@
 	<title>Customers | ProfitFLow</title>
 </svelte:head>
 
-<Modal {confirmText}  />
+<Modal {confirmText} confirmYesEvent={deleteAction} />
 
 <div class="home-page">
 	<div class="search-bar container">
@@ -127,7 +145,7 @@
 							<tr>
 								<td><a on:click={() => setCurrentCustomer(item.first_name + ' ' + item.last_name)} href="/admin/customers/{item.id}">{item.first_name + ' ' + item.last_name}</a></td>
 								<td class="center"><a href="/tickets/{item.id}"><i class="fas fa-edit"></i></a></td>
-								<td class="center"><span class="link" on:click={clickDeleteCustomer}><i class="fas fa-trash-alt"></i></span></td>
+								<td class="center"><span class="link" on:click={() => clickDeleteCustomer(item.id)}><i class="fas fa-trash-alt"></i></span></td>
 							</tr>
 						{/each}
 					</tbody>
