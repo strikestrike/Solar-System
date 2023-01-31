@@ -6,7 +6,7 @@
 		const data = await res.json();
 
 		if (res.status === 200) {
-			return { post: data };
+			return { posts: data };
 		} else {
 			this.error(res.status, data.message);
 		}
@@ -14,7 +14,15 @@
 </script>
 
 <script>
-	export let post;
+	import {onMount} from "svelte";
+
+	export let posts;
+
+	let currentCustomerName = '';
+
+	onMount(() => {
+		currentCustomerName = localStorage.getItem('currentCustomerName');
+	})
 </script>
 
 <style>
@@ -67,21 +75,10 @@
 <div class="home-page">
 	<div class="search-bar container">
 		<div>
-			<h2>User 1</h2>
+			<h2>{currentCustomerName}</h2>
 		</div>
 
 		<div style="flex-grow: 1;"></div>
-
-		<div class="add-user">
-			<a href="/admin/add-user"><i class="fas fa-plus"></i></a>
-		</div>
-		<div>
-			<label>
-				<img src="/user-search.svg" alt="search user svg" id="svg-user-search">
-			</label>
-
-			<input class="form-control" type="text">
-		</div>
 	</div>
 
 	<div class="container page">
@@ -91,22 +88,37 @@
 					<thead>
 					<tr>
 						<th>Name</th>
-						<th>Status</th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
+						<th>Type</th>
+						<th>Expected Throughput</th>
+						<th>Vendor</th>
+						<th class="center">Active</th>
+						<th class="center">SmartConnected</th>
+						<th class="center">Tickets</th>
+						<th class="center">Logs</th>
 					</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td><a href="/converter/1" target="_blank">Converter 1</a></td>
-							<td class="status center"><i class="fas fa-circle"></i></td>
-							<td class="center"><a href="/tickets/1">View Tickets</a></td>
-							<td class="center"><a href="/history/1">View History</a></td>
-							<td class="center"><a href="/tickets/1"><i class="fas fa-edit"></i></a></td>
-							<td class="center"><a href="/history/1"><i class="fas fa-trash-alt"></i></a></td>
-						</tr>
+						{#each posts as item}
+							<tr>
+								<td><a href="/converter/{item.id}" target="_blank" on:click={() => setCurrentConverter(item.name)}>{item.name}</a></td>
+								<td>{item.type}</td>
+								<td>{item.type}</td>
+								<td>{item.vendor}</td>
+
+								{#if item.status == 'ok'}
+									<td class="status center"><i class="fas fa-circle green"></i></td>
+								{:else}
+									<td class="status center"><i class="fas fa-circle"></i></td>
+								{/if}
+								{#if item.status == 'ok'}
+									<td class="status center"><i class="fas fa-circle green"></i></td>
+								{:else}
+									<td class="status center"><i class="fas fa-circle"></i></td>
+								{/if}
+								<td class="center"><a href="/tickets/{item.id}" on:click={() => setCurrentConverter(item.name)}>View</a></td>
+								<td class="center"><a href="/history/{item.id}" on:click={() => setCurrentConverter(item.name)}>View</a></td>
+							</tr>
+						{/each}
 					</tbody>
 				</table>
 			</div>

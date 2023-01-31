@@ -12,6 +12,7 @@
 
 <script>
 	import Nav from '../components/Nav.svelte';
+	import Footer from "../components/Footer.svelte";
 
 	export let isLogin = false;
 	export let role = '';
@@ -19,7 +20,7 @@
 </script>
 
 <style>
-	main{height: calc(100vh - 116px);}
+	main{min-height: calc(100vh - 300px);}
 </style>
 
 <Nav {segment} {isLogin} {role} />
@@ -27,3 +28,5 @@
 <main>
 	<slot></slot>
 </main>
+
+<Footer />

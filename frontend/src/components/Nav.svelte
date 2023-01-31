@@ -72,11 +72,11 @@
 		<ul class="nav pull-xs-right">
 			<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">Home</a></li>
 
-			{#if role == 'customer'}
+			{#if isLogin && role == 0}
 				<li><a aria-current="{segment === 'converter' ? 'page' : undefined}" href="/converter">Converter</a></li>
 			{/if}
-			{#if role == 'admin'}
-				<li><a aria-current="{segment === 'admin/customers' ? 'page' : undefined}" href="/admin/customers">Customers</a></li>
+			{#if isLogin && role == 1}
+				<li><a aria-current="{segment === 'customers' ? 'page' : undefined}" href="/admin/customers">Customers</a></li>
 			{/if}
 
 			{#if isLogin}

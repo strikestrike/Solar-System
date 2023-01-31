@@ -1,6 +1,12 @@
 <script context="module">
-	export function preload() {
-		return this.fetch(`/admin/customers.json`).then(r => r.json()).then(posts => {
+	export function preload({ query }) {
+		let url = '/admin/customers.json?';
+
+		if(!!query.q){
+			url += 'q=' + query.q;
+		}
+
+		return this.fetch(url).then(r => r.json()).then(posts => {
 			return { posts };
 		});
 	}
@@ -28,6 +34,10 @@
 
 	function controlConfirm(){
 		document.getElementById("btn-confirm-modal").click();
+	}
+
+	function setCurrentCustomer(name){
+		localStorage.setItem('currentCustomerName', name);
 	}
 
 </script>
@@ -108,16 +118,16 @@
 					<thead>
 						<tr>
 							<th>Name</th>
-							<th></th>
-							<th></th>
+							<th class="center">Edit</th>
+							<th class="center">Delete</th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each posts as item}
 							<tr>
-								<td><a href="/admin/customers/{item.id}">{item.title}</a></td>
+								<td><a on:click={() => setCurrentCustomer(item.first_name + ' ' + item.last_name)} href="/admin/customers/{item.id}">{item.first_name + ' ' + item.last_name}</a></td>
 								<td class="center"><a href="/tickets/{item.id}"><i class="fas fa-edit"></i></a></td>
-								<td class="center"><span on:click={clickDeleteCustomer}><i class="fas fa-trash-alt"></i></span></td>
+								<td class="center"><span class="link" on:click={clickDeleteCustomer}><i class="fas fa-trash-alt"></i></span></td>
 							</tr>
 						{/each}
 					</tbody>

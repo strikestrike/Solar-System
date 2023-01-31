@@ -1,17 +1,4 @@
-import posts from './_posts.js';
-import axios from "axios";
-
-const headers = {
-	"Content-Type": "application/json",
-	Accept: "application/json",
-};
-
-const contents = JSON.stringify(posts.map(post => {
-	return {
-		title: post.title,
-		id: post.id
-	};
-}));
+import axios from 'axios';
 
 export async function get(req, res) {
 	res.writeHead(200, {
@@ -19,17 +6,19 @@ export async function get(req, res) {
 	});
 
 	try {
-		// const { q, user_id, company_id } = req.params;
+		const params = req.query;
 
-		// const result = await fetch(`http://localhost:8080/api/converters`, {
-		// 	method: "GET",
-		// 	headers: {
-		// 		"Content-Type": "application/json",
-		// 		Accept: "application/json",
-		// 	}
-		// });
+		if(!req.session.token){
+			location.href = '/login';
+		}
 
-		axios.get('http://localhost:8080/api/converters')
+		let url = 'http://localhost:8080/api/users/' + req.session.token.id + '/converters?';
+
+		if(params.q){
+			url += 'q=' + params.q;
+		}
+
+		axios.get(url)
 			.then(response => {
 				// handle success
 				// console.log(response.data)
@@ -37,13 +26,9 @@ export async function get(req, res) {
 			})
 			.catch(error => {
 				// handle error
-				// console.log(error)
 				res.end(JSON.stringify(error));
 			})
-
-		// res.end(JSON.stringify(result));
 	}catch (error){
 		res.end(JSON.stringify(error));
-		// res.end(JSON.stringify({ error: error.message }));
 	}
 }

@@ -6,7 +6,7 @@
 		const data = await res.json();
 
 		if (res.status === 200) {
-			return { post: data };
+			return { posts: data };
 		} else {
 			this.error(res.status, data.message);
 		}
@@ -14,7 +14,15 @@
 </script>
 
 <script>
-	export let post;
+	import {onMount} from "svelte";
+
+	export let posts;
+
+	let currentConverter = '';
+
+	onMount(() => {
+		currentConverter = localStorage.getItem('currentConverter');
+	})
 </script>
 
 <style>
@@ -27,39 +35,33 @@
 
 <div class="container history-page">
 	<div class="title">
-		<h2>Tickets For Converter 1</h2>
+		<h2>Logs for {currentConverter}</h2>
 	</div>
 
 	<div class="container history-list">
 		<table class="table">
 			<thead>
 			<tr>
-				<th></th>
 				<th>Date</th>
-				<th>Problem</th>
+				<th>Message</th>
 				<th>Level</th>
 			</tr>
 			</thead>
 
 			<tbody>
-			<tr>
-				<td>Ticket209</td>
-				<td>01-12-2022</td>
-				<td>Lorem imsum</td>
-				<td>Warning</td>
-			</tr>
-			<tr>
-				<td>Ticket209</td>
-				<td>01-12-2022</td>
-				<td>Lorem imsum</td>
-				<td>Information</td>
-			</tr>
-			<tr>
-				<td>Ticket209</td>
-				<td>01-12-2022</td>
-				<td>Lorem imsum</td>
-				<td>Information</td>
-			</tr>
+				{#each posts as item}
+					<tr>
+						<td>
+							{new Date(item.createdAt).toLocaleDateString('default', {
+								month: '2-digit',
+								day: '2-digit',
+								year: 'numeric'
+							})}
+						</td>
+						<td>{item.message}</td>
+						<td>{item.level}</td>
+					</tr>
+				{/each}
 			</tbody>
 		</table>
 	</div>

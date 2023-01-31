@@ -24,19 +24,19 @@
 </style>
 
 <svelte:head>
-	<title>{post.title} | Converter | ProfitFlow</title>
+	<title>Converter | ProfitFlow</title>
 </svelte:head>
 
 <div class="container converter-page">
 	<div class="row">
-		<div class="photo col-xs-4">
+		<div class="photo col-4">
 			<img src="/converter.png" alt="Converter Image">
 		</div>
-		<div class="description col-xs-8">
-			<h1>{post.title}</h1>
+		<div class="description col-8">
+			<h1>{post.name}</h1>
 
 			<div>
-				{@html post.html}
+				{@html post.description}
 			</div>
 		</div>
 	</div>

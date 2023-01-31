@@ -8,6 +8,8 @@
 
 <script>
 	export let posts;
+
+	let query;
 </script>
 
 <style>
@@ -22,6 +24,8 @@
 </svelte:head>
 
 <h1>Recent posts</h1>
+
+<input type="text" id="query" bind:value={query}>
 
 <ul>
 	{#each posts as post}

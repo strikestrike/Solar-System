@@ -1,84 +1,48 @@
-<!--<script context="module">-->
-<!--	export function preload() {-->
-<!--		return this.fetch(`converter.json`).then(r => r.json()).then(posts => {-->
-<!--			return { posts };-->
-<!--		});-->
-<!--	}-->
-<!--</script>-->
+<script context="module">
+	export function preload({ query }) {
+		let url = 'converter.json?';
+
+		if(!!query.q){
+			url += 'q=' + query.q;
+		}
+
+		return this.fetch(url).then(r => r.json()).then(posts => {
+			return { posts };
+		});
+	}
+</script>
 
 <script>
 	import {onMount} from 'svelte';
-	import axios from "axios";
 
-	let posts = [];
+	export let posts;
 
-	let q = '';
-
-	async function loadData(){
-		axios.get('http://localhost:8080/api/converters')
-			.then(response => {
-				// handle success
-				// console.log(response.data)
-				posts = response.data;
-			})
-			.catch(error => {
-				// handle error
-				console.log(error)
-			})
-	}
+	let searchQuery = '';
 
 	onMount(async () => {
-		await loadData();
+		searchQuery = localStorage.getItem("searchQuery") || "";
+
 	});
 
+	const handleSubmit = () => {
+		localStorage.setItem("searchQuery", searchQuery);
+		location.href = `converter?q=${searchQuery}`;
+	};
 
+	const inputKeypressEvent = (e) => {
+		if(e.keyCode === 13){
+			handleSubmit();
+		}
+	}
+
+	function setCurrentConverter(name){
+		localStorage.setItem('currentConverter', name);
+	}
 </script>
 
 <svelte:head>
 	<title>Converter | ProfitFLow</title>
 </svelte:head>
-
-<div class="home-page">
-	<div class="search-bar container d-flex justify-content-between">
-		<div>
-			<h1>Converters</h1>
-		</div>
-		<div>
-			<label>
-				<img src="/user-search.svg" alt="search user svg" id="svg-user-search">
-			</label>
-
-			<input class="form-control" type="text">
-		</div>
-	</div>
-
-	<div class="container page">
-		<div class="row">
-			<div class="col-md-12 converter-list">
-				<table class="table">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th class="center">Status</th>
-							<th></th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each posts as item}
-							<tr>
-								<td><a href="/converter/{item.id}" target="_blank">{item.brand + '[' + item.serial_number + ']'}</a></td>
-								<td class="status center"><i class="fas fa-circle"></i></td>
-								<td class="center"><a href="/tickets/{item.id}">View Tickets</a></td>
-								<td class="center"><a href="/history/{item.id}">View History</a></td>
-							</tr>
-						{/each}
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-</div>
 
 <style>
 	#svg-user-search{
@@ -104,6 +68,66 @@
 
 	/**/
 	.converter-list .item>.title>a{color: #333;}
-	td.status>i{color: #17d632;}
-	th.center, td.center{text-align: center;}
+	td.status>i{color: #878787;}
+	td.status>i.green{color: #17d632;}
 </style>
+
+<div class="home-page">
+	<div class="search-bar container d-flex justify-content-between">
+		<div>
+			<h1>Converters</h1>
+		</div>
+		<div>
+			<label>
+				<img src="/user-search.svg" alt="search user svg" id="svg-user-search">
+			</label>
+
+			<input class="form-control" type="text" bind:value={searchQuery} on:keypress={inputKeypressEvent} id="input-search">
+		</div>
+	</div>
+
+	<div class="container page">
+		<div class="row">
+			<div class="col-md-12 converter-list">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Type</th>
+							<th>Expected Throughput</th>
+							<th>Vendor</th>
+							<th class="center">Active</th>
+							<th class="center">SmartConnected</th>
+							<th>Tickets</th>
+							<th>Logs</th>
+						</tr>
+					</thead>
+					<tbody>
+						{#each posts as item}
+							<tr>
+								<td><a href="/converter/{item.id}" target="_blank" on:click={() => setCurrentConverter(item.name)}>{item.name}</a></td>
+								<td>{item.type}</td>
+								<td>{item.type}</td>
+								<td>{item.vendor}</td>
+
+								{#if item.status == 'ok'}
+									<td class="status center"><i class="fas fa-circle green"></i></td>
+								{:else}
+									<td class="status center"><i class="fas fa-circle"></i></td>
+								{/if}
+								{#if item.status == 'ok'}
+									<td class="status center"><i class="fas fa-circle green"></i></td>
+								{:else}
+									<td class="status center"><i class="fas fa-circle"></i></td>
+								{/if}
+								<td class="center"><a href="/tickets/{item.id}" on:click={() => setCurrentConverter(item.name)}>View</a></td>
+								<td class="center"><a href="/history/{item.id}" on:click={() => setCurrentConverter(item.name)}>View</a></td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
