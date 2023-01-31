@@ -19,12 +19,18 @@ db.Sequelize = Sequelize
 db.sequelize = sequelize
 
 //connecting to model
-db.users = require('./user.model')(sequelize, DataTypes)
-db.companies = require('./company.model')(sequelize, DataTypes)
-db.converters = require('./converter.model')(sequelize, DataTypes)
-db.events = require('./event.model')(sequelize, DataTypes)
-db.throughputs = require('./throughput.model')(sequelize, DataTypes)
-db.tickets = require('./ticket.model')(sequelize, DataTypes)
+db.User = require('./user.model')(sequelize, DataTypes)
+db.Company = require('./company.model')(sequelize, DataTypes)
+db.Converter = require('./converter.model')(sequelize, DataTypes)
+db.Event = require('./event.model')(sequelize, DataTypes)
+db.Throughput = require('./throughput.model')(sequelize, DataTypes)
+db.Ticket = require('./ticket.model')(sequelize, DataTypes)
+
+Object.keys(db).forEach(modelName => {
+    if (db[modelName].associate) {
+        db[modelName].associate(db);
+    }
+});
 
 //exporting the module
 module.exports = db

@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const { check, validationResult } = require('express-validator');
 
 const Op = db.Sequelize.Op;
-const User = db.users;
+const User = db.User;
 
 exports.createUser = async (req, res) => {
     const errors = validationResult(req);

@@ -2,7 +2,7 @@ const db = require('../models/model');
 const bcrypt = require('bcrypt');
 
 const Op = db.Sequelize.Op;
-const Customer = db.customers;
+const Customer = db.Customer;
 
 exports.createCustomer = async (req, res) => {
     const { name, email, phone, password, company_id } = req.body;

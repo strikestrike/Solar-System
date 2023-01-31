@@ -1,9 +1,8 @@
 const db = require('../models/model');
-const bcrypt = require('bcrypt');
 const { check, validationResult } = require('express-validator');
 
 const Op = db.Sequelize.Op;
-const Company = db.companies;
+const Company = db.Company;
 
 exports.createCompany = async (req, res) => {
     const errors = validationResult(req);

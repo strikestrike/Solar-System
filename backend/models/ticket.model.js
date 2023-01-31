@@ -33,7 +33,6 @@ module.exports = (sequelize, DataTypes) => {
     };
 
     Ticket.beforeCreate((ticket, options) => {
-        console.log(new Date());
         return Ticket.findAll({
             where: {
                 created_at: {

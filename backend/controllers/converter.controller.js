@@ -2,7 +2,8 @@ const db = require('../models/model');
 const { check, validationResult } = require('express-validator');
 
 const Op = db.Sequelize.Op;
-const Converter = db.converters;
+const Converter = db.Converter;
+const Throughput = db.Throughput;
 
 exports.createConverter = async (req, res) => {
     const errors = validationResult(req);
@@ -61,7 +62,19 @@ exports.getConverters = (req, res) => {
         conditions.push({ company_id: req.params.companyId });
     }
 
-    Converter.findAll({ where: { [Op.and]: conditions } })
+    Converter.findAll({
+        where: { [Op.and]: conditions },
+        include: [
+            {
+                association: 'throughputs',
+                attributes: ['expected_throughput'],
+                order: [['created_at', 'DESC']],
+                limit: 1,
+                required: true,
+                duplicating: false,
+            },
+        ],
+    })
         .then(data => {
             res.send(data);
         })

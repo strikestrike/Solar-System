@@ -2,7 +2,7 @@ const db = require('../models/model');
 const { check, validationResult } = require('express-validator');
 
 const Op = db.Sequelize.Op;
-const Throughput = db.throughputs;
+const Throughput = db.Throughput;
 
 exports.createThroughput = async (req, res) => {
     const errors = validationResult(req);

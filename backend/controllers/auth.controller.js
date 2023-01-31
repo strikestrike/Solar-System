@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 
-const User = db.users;
+const User = db.User;
 
 exports.singin = async (req, res) => {
     try {

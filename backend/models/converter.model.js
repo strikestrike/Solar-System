@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
     Converter.associate = function (models) {
         Converter.hasMany(models.Ticket, { foreignKey: 'converter_id', as: 'tickets' });
         Converter.hasMany(models.Event, { foreignKey: 'converter_id', as: 'events' });
-        Converter.hasOne(models.Throughput, { foreignKey: 'converter_id', as: 'throughput' });
+        Converter.hasMany(models.Throughput, { foreignKey: 'converter_id', as: 'throughputs' });
         Converter.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
         Converter.belongsTo(models.Company, { foreignKey: 'company_id', as: 'company' });
     };

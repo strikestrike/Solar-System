@@ -2,7 +2,7 @@ const db = require('../models/model');
 const { check, validationResult } = require('express-validator');
 
 const Op = db.Sequelize.Op;
-const Event = db.events;
+const Event = db.Event;
 
 exports.createEvent = async (req, res) => {
     const errors = validationResult(req);
