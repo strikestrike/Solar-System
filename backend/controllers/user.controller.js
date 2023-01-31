@@ -11,7 +11,7 @@ exports.createUser = async (req, res) => {
         return res.status(400).send({ errors: errors.array() });
     }
 
-    const { first_name, last_name, address, birthday, email, phone, password } = req.body;
+    const { first_name, last_name, address, birthday, email, additional, password } = req.body;
 
     const existingUser = await User.findOne({ where: { email: email } });
     if (existingUser) {
@@ -27,7 +27,7 @@ exports.createUser = async (req, res) => {
         birthday,
         avatar: (req.file !== undefined ? "/uploads/" + req.file.filename : null),
         email,
-        phone,
+        additional,
         password: hashedPassword,
         company_id: 0,
         role: constant.ROLE_CUSTOMER
@@ -53,7 +53,7 @@ exports.getUsers = async (req, res) => {
                 { last_name: { [Op.iLike]: `%${search}%` } },
                 { address: { [Op.iLike]: `%${search}%` } },
                 { email: { [Op.iLike]: `%${search}%` } },
-                { phone: { [Op.iLike]: `%${search}%` } },
+                { additional: { [Op.iLike]: `%${search}%` } },
             ]
         });
     }
@@ -148,7 +148,6 @@ exports.deleteUser = async (req, res) => {
 
 exports.userValidations = [
     check('first_name').not().isEmpty().withMessage('first_name is required'),
-    check('email').isEmail().withMessage('email is not valid'),
-    check('password').not().isEmpty().withMessage('password is required'),
+    // check('email').isEmail().withMessage('email is not valid'),
     // check('role').not().isEmpty().withMessage('role is required'),
 ];
