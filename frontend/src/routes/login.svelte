@@ -24,11 +24,15 @@
             $session.token = parsed.token;
             $session.role = parsed.role;
 
-            if(parsed.role == 'customer'){
+            console.log(parsed);
+
+            if(parsed.role == 0){ // customer
                 location.href = '/converter';
-            }else if(parsed.role == 'admin'){
+            }else if(parsed.role == 1){ // admin
                 location.href = '/admin/customers';
-            }else{
+            }else if(parsed.role == 2){ // global admin
+                location.href = '/global-admin/customers';
+            }else{ //
                 location.href = '/';
             }
 

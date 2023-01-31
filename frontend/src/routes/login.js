@@ -19,14 +19,12 @@ export async function post(req, res) {
             throw new Error(parsed.error);
         }
 
-        let role = parsed.role;
+        let user = parsed.user;
 
-        role = 'admin';
+        req.session.token = user;
+        req.session.role = user.role;
 
-        req.session.token = parsed.user;
-        req.session.role = role;
-
-        res.end(JSON.stringify({ token: parsed.user, role: role }));
+        res.end(JSON.stringify({ token: user, role: user.role }));
     } catch (error) {
         res.end(JSON.stringify({ error: error.message }));
     }

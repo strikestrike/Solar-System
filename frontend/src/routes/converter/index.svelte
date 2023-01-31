@@ -1,13 +1,37 @@
-<script context="module">
-	export function preload() {
-		return this.fetch(`converter.json`).then(r => r.json()).then(posts => {
-			return { posts };
-		});
-	}
-</script>
+<!--<script context="module">-->
+<!--	export function preload() {-->
+<!--		return this.fetch(`converter.json`).then(r => r.json()).then(posts => {-->
+<!--			return { posts };-->
+<!--		});-->
+<!--	}-->
+<!--</script>-->
 
 <script>
-	export let posts;
+	import {onMount} from 'svelte';
+	import axios from "axios";
+
+	let posts = [];
+
+	let q = '';
+
+	async function loadData(){
+		axios.get('http://localhost:8080/api/converters')
+			.then(response => {
+				// handle success
+				// console.log(response.data)
+				posts = response.data;
+			})
+			.catch(error => {
+				// handle error
+				console.log(error)
+			})
+	}
+
+	onMount(async () => {
+		await loadData();
+	});
+
+
 </script>
 
 <svelte:head>
@@ -15,7 +39,10 @@
 </svelte:head>
 
 <div class="home-page">
-	<div class="search-bar container">
+	<div class="search-bar container d-flex justify-content-between">
+		<div>
+			<h1>Converters</h1>
+		</div>
 		<div>
 			<label>
 				<img src="/user-search.svg" alt="search user svg" id="svg-user-search">
@@ -40,7 +67,7 @@
 					<tbody>
 						{#each posts as item}
 							<tr>
-								<td><a href="/converter/{item.id}" target="_blank">{item.title}</a></td>
+								<td><a href="/converter/{item.id}" target="_blank">{item.brand + '[' + item.serial_number + ']'}</a></td>
 								<td class="status center"><i class="fas fa-circle"></i></td>
 								<td class="center"><a href="/tickets/{item.id}">View Tickets</a></td>
 								<td class="center"><a href="/history/{item.id}">View History</a></td>
