@@ -11,14 +11,14 @@ exports.createUser = async (req, res) => {
         return res.status(400).send({ errors: errors.array() });
     }
 
-    const { first_name, last_name, address, birthday, email, additional, password } = req.body;
+    const { first_name, last_name, address, birthday, email, additional, password, company_id } = req.body;
 
     const existingUser = await User.findOne({ where: { email: email } });
     if (existingUser) {
         return res.status(400).send({ error: 'Email already in use' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password ?? '123456', 10);
 
     User.create({
         first_name,
@@ -29,7 +29,7 @@ exports.createUser = async (req, res) => {
         email,
         additional,
         password: hashedPassword,
-        company_id: 0,
+        company_id: company_id ?? null,
         role: constant.ROLE_CUSTOMER
     })
         .then(data => {
