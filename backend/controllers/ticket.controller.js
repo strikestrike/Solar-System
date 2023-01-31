@@ -10,9 +10,9 @@ exports.createTicket = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { title, description, status, converter_id } = req.body;
+    const { problem, level, converter_id } = req.body;
 
-    const ticket = { title, description, status, converter_id };
+    const ticket = { ticket_no: 1, problem, level, converter_id };
 
     // Save Ticket in the database
     Ticket.create(ticket)
@@ -33,8 +33,8 @@ exports.getTickets = async (req, res) => {
     if (search) {
         conditions.push({
             [Op.or]: [
-                { title: { [Op.iLike]: `%${search}%` } },
-                { description: { [Op.iLike]: `%${search}%` } }
+                { problem: { [Op.iLike]: `%${search}%` } },
+                { level: { [Op.iLike]: `%${search}%` } }
             ]
         });
     }
@@ -124,8 +124,7 @@ exports.deleteTicket = async (req, res) => {
 }
 
 exports.ticketValidations = [
-    check('title', 'Title is required').not().isEmpty(),
-    check('description', 'Description is required').not().isEmpty(),
-    check('status', 'Status is required').not().isEmpty(),
+    check('problem', 'Problem is required').not().isEmpty(),
+    check('level', 'Level is required').not().isEmpty(),
     check('converter_id', 'Converter id is required').not().isEmpty(),
 ];

@@ -1,15 +1,15 @@
 //ticket model
 module.exports = (sequelize, DataTypes) => {
     const Ticket = sequelize.define("ticket", {
-        title: {
+        ticket_no: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        description: {
+        problem: {
             type: DataTypes.TEXT,
             allowNull: false
         },
-        status: {
+        level: {
             type: DataTypes.STRING,
             allowNull: false
         },

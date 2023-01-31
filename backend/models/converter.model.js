@@ -4,16 +4,28 @@ module.exports = (sequelize, DataTypes) => {
         photo: {
             type: DataTypes.STRING,
         },
-        brand: {
+        name: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        description: {
+        timezone: {
+            type: DataTypes.STRING,
+        },
+        type: {
+            type: DataTypes.STRING,
+        },
+        product: {
+            type: DataTypes.STRING,
+        },
+        prduct_id: {
             type: DataTypes.STRING,
         },
         serial_number: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        vendor: {
+            type: DataTypes.STRING,
         },
         status: {
             type: DataTypes.STRING,

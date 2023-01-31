@@ -10,17 +10,16 @@ exports.createConverter = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { brand, description, serial_number, status, company_id, user_id } = req.body;
+    const { name, serial_number, status, company_id, user_id } = req.body;
 
-    const converteryExists = await Converter.findOne({ where: { serial_number: serial_number } });
+    const converteryExists = await Converter.findOne({ where: { name: name, serial_number: serial_number } });
     if (converteryExists) {
         return res.status(400).json({ error: "Converter already exists" });
     }
 
     // Create a converter
     const converter = {
-        brand,
-        description,
+        name,
         photo: (req.file !== undefined ? "/uploads/" + req.file.filename : null),
         serial_number,
         status,
@@ -47,8 +46,7 @@ exports.getConverters = (req, res) => {
     if (search) {
         conditions.push({
             [Op.or]: [
-                { brand: { [Op.iLike]: `%${search}%` } },
-                { description: { [Op.iLike]: `%${search}%` } },
+                { name: { [Op.iLike]: `%${search}%` } },
                 { serial_number: { [Op.iLike]: `%${search}%` } }
             ]
         });
@@ -148,7 +146,7 @@ exports.deleteConverter = (req, res) => {
 
 
 exports.converterValidations = [
-    check('brand', 'Brand is required').not().isEmpty(),
+    check('name', 'Name is required').not().isEmpty(),
     check('serial_number', 'Serial number is required').not().isEmpty(),
     check('status', 'Status is required').not().isEmpty(),
     check('company_id', 'Company id is required').not().isEmpty(),
