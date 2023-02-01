@@ -17,7 +17,8 @@ export default function authMiddleware(req, res, next) {
     }
 
     if(req.session.token){
-        if(req.path.indexOf('/admin') >= 0 && req.session.role != 1){
+        if((req.path.indexOf('/admin') >= 0 && req.session.role < 1)
+            || (req.path.indexOf('/gadmin') >= 0 && req.session.role != 2)){
             res.writeHead(302, { Location: '/login' });
             return res.end();
         }

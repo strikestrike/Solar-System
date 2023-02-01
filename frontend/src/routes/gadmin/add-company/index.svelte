@@ -1,36 +1,41 @@
 <script context="module">
-    export async function preload({ params }) {
-        // the `slug` parameter is available because
-        // this file is called [slug].svelte
-        const res = await this.fetch(`/user/${params.id}.json`);
-        const data = await res.json();
+    export async function preload(page, session) {
+        const { token, role } = session;
 
-        if (res.status === 200) {
-            return { post: data };
-        } else {
-            this.error(res.status, data.message);
+        if (token) {
+            return {token};
+        }else{
+            return null;
         }
     }
 </script>
 
 <script>
     import axios from "axios";
+    import {onMount} from "svelte";
 
-    export let post;
+    export let token;
 
     let errors = [];
+
+    onMount(() => {
+        const select = document.querySelector("select");
+        select.vanillaSelect();
+    });
 
     async function submitForm(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
 
+        formData.set('company_id', token.company_id);
+
         try {
-            await axios.put('http://localhost:8080/api/users/' + post.id, formData)
+            await axios.post('http://localhost:8080/api/companies', formData)
                 .then(response => {
                     // handle success
                     console.log(response.data)
 
-                    location.href = '/admin/customers';
+                    location.href = '/gadmin/companies';
                 })
                 .catch(error => {
                     if(error.response.data.error){
@@ -53,6 +58,7 @@
     div.add-user>div.title{margin-bottom: 40px;}
     textarea{resize: vertical;}
     div.form-group{margin-bottom: 20px;}
+
 </style>
 
 <div class="container add-user">
@@ -69,34 +75,28 @@
     {/if}
 
     <div class="title">
-        <h1>Edit User</h1>
+        <h1>Add Company</h1>
     </div>
 
     <div class="form-container">
         <form method="post" on:submit={submitForm}>
             <div class="form-group">
-                <label class="form-label" for="first-name">First Name: </label>
-                <input type="text" id="first-name" name="first_name" class="form-control" required value={post.first_name}>
+                <label class="form-label" for="name">Company Name: </label>
+                <input type="text" id="name" name="name" class="form-control" required>
             </div>
             <div class="form-group">
-                <label class="form-label" for="last-name">Last Name: </label>
-                <input type="text" id="last-name" name="last_name" class="form-control" required value="{post.last_name}">
+                <label class="form-label" for="admin">Administrator: </label>
+                <input type="email" id="admin" name="admin" class="form-control" required>
             </div>
             <div class="form-group">
-                <label class="form-label" for="email">Email: </label>
-                <input type="email" id="email" name="email" class="form-control" required value="{post.email}">
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="birthday">Birthday: </label>
-                <input type="date" id="birthday" name="birthday" class="form-control" required value="{post.birthday}">
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="address">Address: </label>
-                <input type="text" id="address" name="address" class="form-control" required value="{post.address}">
+                <label class="form-label" for="converters">Converters: </label>
+                <select class="form-control" multiple id="converters" name="converters">
+                    <option></option>
+                </select>
             </div>
             <div class="form-group">
                 <label class="form-label" for="additional">Additional: </label>
-                <textarea id="additional" rows="4" class="form-control" required value="{post.additional}"></textarea>
+                <textarea id="additional" rows="4" class="form-control" required></textarea>
             </div>
             <div class="form-group">
                 <button class="btn btn-primary" type="submit">Save</button>

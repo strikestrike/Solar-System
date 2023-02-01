@@ -8,7 +8,6 @@ import sessionFileStore from 'session-file-store';
 // middleware
 import authMiddleware from "./middleware/auth";
 
-
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
 

@@ -34,7 +34,7 @@
             }else if(parsed.role == 1){ // admin
                 location.href = '/admin/customers';
             }else if(parsed.role == 2){ // global admin
-                location.href = '/global-admin/customers';
+                location.href = '/gadmin/companies';
             }else{ //
                 location.href = '/';
             }
