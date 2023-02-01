@@ -24,6 +24,9 @@
             $session.token = parsed.token;
             $session.role = parsed.role;
 
+            localStorage.setItem('token', parsed.token);
+            localStorage.setItem('role', parsed.role);
+
             console.log(parsed);
 
             if(parsed.role == 0){ // customer

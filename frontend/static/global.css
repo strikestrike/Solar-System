@@ -35,6 +35,11 @@ code {
 }
 .center{text-align: center;}
 
+#error-container{margin-bottom: 40px;}
+#error-container>div{display: flex;}
+#error-container>div>div:nth-child(1){margin-right: 10px;}
+#error-container>div i{font-size: 10px;}
+
 @media (min-width: 400px) {
 	body {
 		font-size: 16px;

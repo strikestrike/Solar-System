@@ -15,9 +15,11 @@
 <script>
 	import {onMount} from 'svelte';
 	import Modal from "../../../components/Modal.svelte";
+	import Toast from "../../../components/Toast.svelte";
 	import axios from "axios";
 
 	export let posts;
+	let toastBody;
 
 	let showModal;
 	let showConfirm = false;
@@ -35,8 +37,13 @@
 		controlConfirm();
 	}
 
+	let confirmModal;
+
 	function controlConfirm(){
-		document.getElementById("btn-confirm-modal").click();
+		// document.getElementById("btn-confirm-modal").click();
+		confirmModal = new bootstrap.Modal('#myModal');
+
+		confirmModal.show();
 	}
 
 	function setCurrentCustomer(name){
@@ -46,17 +53,34 @@
 	function deleteAction(){
 		let id = localStorage.getItem('currentCustomerId');
 
+		confirmModal.hide();
+
 		axios.delete('http://localhost:8080/api/users/' + id)
 				.then(response => {
 					// handle success
 					// console.log(response.data)
 					console.log(response.data);
+
+					toastBody = "Deleted successfully!";
+					showToast();
 				})
 				.catch(error => {
 					console.log(error);
-				});
 
-		toastr.success("Success message");
+					toastBody = "Error happened!";
+					showToast();
+				});
+	}
+
+	function showToast(){
+		const toastLiveExample = document.getElementById('liveToast')
+		const toast = new bootstrap.Toast(toastLiveExample, {
+			// delay: 3000,
+			animation: true,
+			autohide: false,
+		})
+
+		toast.show();
 	}
 
 ;</script>
@@ -108,6 +132,7 @@
 </svelte:head>
 
 <Modal {confirmText} confirmYesEvent={deleteAction} />
+<Toast {toastBody} />
 
 <div class="home-page">
 	<div class="search-bar container">
@@ -144,7 +169,7 @@
 						{#each posts as item}
 							<tr>
 								<td><a on:click={() => setCurrentCustomer(item.first_name + ' ' + item.last_name)} href="/admin/customers/{item.id}">{item.first_name + ' ' + item.last_name}</a></td>
-								<td class="center"><a href="/tickets/{item.id}"><i class="fas fa-edit"></i></a></td>
+								<td class="center"><a href="/admin/edit-user/{item.id}"><i class="fas fa-edit"></i></a></td>
 								<td class="center"><span class="link" on:click={() => clickDeleteCustomer(item.id)}><i class="fas fa-trash-alt"></i></span></td>
 							</tr>
 						{/each}
