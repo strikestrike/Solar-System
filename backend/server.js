@@ -3,6 +3,7 @@ var cors = require('cors');
 var bodyParser = require('body-parser');
 var route = require("./routes/index.js");
 const cookieParser = require('cookie-parser');
+const { Umzug, SequelizeStorage } = require('umzug');
 const db = require('./models/model');
 
 global.constant = require('./util/constant');
@@ -18,8 +19,26 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-db.sequelize.sync({ force: false }).then(() => {
+sequelize = db.sequelize;
+
+var seeder = new Umzug({
+  migrations: {
+    params: [
+      db.sequelize.getQueryInterface(),
+      sequelize
+    ],
+    glob: ['seeders/*.js', { cwd: __dirname }]
+  },
+  storage: new SequelizeStorage({
+    sequelize,
+    modelName: 'seeders'
+  }),
+  logger: console
+})
+
+db.sequelize.sync({ force: true }).then(() => {
   console.log("db has been synced");
+  seeder.up()
 });
 
 app.get("/", (req, res) => {

@@ -101,6 +101,11 @@ exports.updateUser = async (req, res) => {
         req.body.photo = "/uploads/" + req.file.filename;
     }
 
+    if (req.body.password) {
+        const hashedPassword = await bcrypt.hash(req.body.password ?? '123456', 10);
+        req.body.password = hashedPassword;
+    }
+
     User.update(req.body, {
         where: { id: id }
     })

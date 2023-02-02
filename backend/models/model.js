@@ -5,7 +5,14 @@ require('dotenv').config();
 //Database connection with dialect of postgres specifying the database we are using
 //port for my database is 5432
 //database name is discover
-const sequelize = new Sequelize(process.env.DEV_DATABASE_URL, { dialect: "postgres" })
+let sequelize;
+if (process.env.NODE_ENV === 'development') {
+    sequelize = new Sequelize(process.env.DEV_DATABASE_URL, { dialect: "postgres" })
+} else if (process.env.NODE_ENV === 'test') {
+    sequelize = new Sequelize(process.env.TEST_DATABASE_URL, { dialect: "postgres" })
+} else {
+    sequelize = new Sequelize(process.env.DATABASE_URL, { dialect: "postgres" })
+}
 
 //checking if connection is done
 sequelize.authenticate().then(() => {
