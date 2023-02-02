@@ -14,7 +14,8 @@ export function get(req, res) {
 			location.href = '/login';
 		}
 
-		let url = 'http://localhost:8080/api/converters/' + id + '/tickets';
+		const {BACKEND_HOST} = process.env;
+		let url = BACKEND_HOST + '/api/converters/' + id + '/tickets';
 
 		axios.get(url)
 			.then(response => {

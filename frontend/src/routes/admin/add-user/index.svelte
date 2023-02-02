@@ -24,7 +24,8 @@
         formData.set('company_id', token.company_id);
 
         try {
-            await axios.post('http://localhost:8080/api/users', formData)
+            const {BACKEND_HOST} = process.env;
+            await axios.post(BACKEND_HOST + '/api/users', formData)
                 .then(response => {
                     // handle success
                     console.log(response.data)

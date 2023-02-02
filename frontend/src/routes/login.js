@@ -7,7 +7,9 @@ export async function post(req, res) {
     try {
         const { email, password } = req.body;
 
-        const result = await fetch(`http://localhost:8080/api/signin`, {
+        const {BACKEND_HOST} = process.env;
+
+        const result = await fetch(BACKEND_HOST + `/api/signin`, {
             method: "POST",
             headers,
             body: JSON.stringify({ email, password }),

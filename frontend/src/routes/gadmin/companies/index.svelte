@@ -68,7 +68,8 @@
 
 		confirmModal.hide();
 
-		axios.delete('http://localhost:8080/api/companies/' + id)
+		const {BACKEND_HOST} = process.env;
+		axios.delete(BACKEND_HOST + '/api/companies/' + id)
 				.then(response => {
 					// handle success
 					// console.log(response.data)

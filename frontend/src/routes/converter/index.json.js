@@ -11,8 +11,8 @@ export async function get(req, res) {
 		if(!req.session.token){
 			location.href = '/login';
 		}
-
-		let url = 'http://localhost:8080/api/users/' + req.session.token.id + '/converters?';
+		const {BACKEND_HOST} = process.env;
+		let url = BACKEND_HOST + '/api/users/' + req.session.token.id + '/converters?';
 
 		if(params.q){
 			url += 'q=' + params.q;

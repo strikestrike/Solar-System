@@ -12,7 +12,8 @@ export async function get(req, res) {
 			location.href = '/login';
 		}
 
-		let url = 'http://localhost:8080/api/companies';
+		const {BACKEND_HOST} = process.env;
+		let url = BACKEND_HOST + '/api/companies';
 
 		if(params.q){
 			url += 'q=' + params.q;

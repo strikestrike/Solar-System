@@ -25,7 +25,8 @@
         const formData = new FormData(event.target);
 
         try {
-            await axios.put('http://localhost:8080/api/users/' + post.id, formData)
+            const {BACKEND_HOST} = process.env;
+            await axios.put(BACKEND_HOST + '/api/users/' + post.id, formData)
                 .then(response => {
                     // handle success
                     console.log(response.data)
