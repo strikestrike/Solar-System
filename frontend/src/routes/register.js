@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const headers = {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -9,21 +11,18 @@ export async function post(req, res) {
 
         const {BACKEND_HOST} = process.env;
 
-        const result = await fetch(BACKEND_HOST + `/api/signup`, {
-            method: "POST",
-            headers,
-            body: JSON.stringify(req.body),
-        });
+        await axios.post(BACKEND_HOST + '/api/signup', req.body)
+            .then(response => {
+                // handle success
+                let user = response.data.user;
 
-        const parsed = await result.json();
+                req.session.token = user;
 
-        if (typeof parsed.error !== "undefined") {
-            throw new Error(parsed.error);
-        }
-
-        let user = parsed.user;
-
-        res.end(JSON.stringify({ token: user, role: user.role }));
+                res.end(JSON.stringify({ token: user}));
+            })
+            .catch(error => {
+                throw new Error(error.response.data.error);
+            });
     } catch (error) {
         res.end(JSON.stringify({ error: error.message }));
     }
