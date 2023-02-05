@@ -1,6 +1,6 @@
 <script>
     import axios from "axios";
-    import Toast from "../../components/Toast.svelte";
+    import Toast from "../components/Toast.svelte";
 
     let password = "";
     let passwordCheck = "";
