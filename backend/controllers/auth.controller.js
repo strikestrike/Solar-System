@@ -42,7 +42,7 @@ exports.signup = async (req, res) => {
     }
 
     try {
-        const { first_name, last_name, address, birthday, email, phone, password } = req.body;
+        const { first_name, last_name, address, email, phone, password } = req.body;
 
         const existingUser = await User.findOne({ where: { email: email } });
         if (existingUser) {
@@ -55,7 +55,6 @@ exports.signup = async (req, res) => {
             first_name,
             last_name,
             address,
-            birthday,
             avatar: (req.file !== undefined ? "/uploads/" + req.file.filename : null),
             email,
             phone,

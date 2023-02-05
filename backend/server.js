@@ -5,6 +5,7 @@ var route = require("./routes/index.js");
 const cookieParser = require('cookie-parser');
 const { Umzug, SequelizeStorage } = require('umzug');
 const db = require('./models/model');
+const scheduledFunctions = require('./cron_job');
 
 global.constant = require('./util/constant');
 global.__basedir = __dirname;
@@ -36,10 +37,12 @@ var seeder = new Umzug({
   logger: console
 })
 
-db.sequelize.sync({ force: true }).then(() => {
+db.sequelize.sync({ force: false }).then(() => {
   console.log("db has been synced");
   seeder.up()
 });
+
+scheduledFunctions.initScheduledJobs();
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to visit our solor backend" });
