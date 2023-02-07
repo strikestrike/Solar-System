@@ -40,7 +40,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         company_id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
             references: {
                 model: 'companies',
                 key: 'id'

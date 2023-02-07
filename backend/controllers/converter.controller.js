@@ -60,7 +60,11 @@ exports.getConverters = (req, res) => {
     }
 
     if (req.params.companyId) {
-        conditions.push({ company_id: req.params.companyId });
+        if (req.params.companyId == 0) {
+            conditions.push({ company_id: null });
+        } else {
+            conditions.push({ company_id: req.params.companyId });
+        }
     }
 
     if (req.query.filter_flag && req.query.filter_flag == 1) {
