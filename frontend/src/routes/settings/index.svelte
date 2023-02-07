@@ -1,13 +1,45 @@
 <script context="module">
-    export function preload() {
-        return this.fetch(`settings.json`).then(r => r.json()).then(user => {
-            return { user };
-        });
+	export async function preload(page, session) {
+		const { token } = session;
+
+		return {user: token};
     }
 </script>
 
 <script>
-    export let user;
+    import axios from "axios";
+
+	export let user;
+
+	let password;
+	let password_check;
+	let errors = [];
+
+	async function handleSubmit(){
+		const formData = new FormData(event.target);
+
+		try {
+			await axios.post('/settings', formData)
+					.then(response => {
+						// handle success
+						// console.log(response.data)
+
+						location.href = '/profile';
+					})
+					.catch(error => {
+						if(error.response.data.error){
+							errors = [
+								{msg: error.response.data.error}
+							];
+						}else{
+							errors = error.response.data.errors;
+						}
+					});
+
+		} catch (error) {
+			console.error(error);
+		}
+	}
 </script>
 
 <style>
@@ -20,48 +52,77 @@
 <div class="settings-page">
     <div class="container page">
         <div class="row">
-            <div class="col-md-6 offset-md-3 col-xs-12">
+            <div class="col-md-6 offset-md-3 col-xs-12 py-4">
                 <h1 class="text-xs-center">Your Settings:</h1>
 
-                <form method="POST" action="?/save">
+                <form method="POST" on:submit|preventDefault={handleSubmit}>
 
-					<fieldset class="form-group">
-						<label>User Name:</label>
+					<fieldset class="form-group mb-3">
+						<label class="form-label">First Name:</label>
 						<input
 							class="form-control form-control-lg"
-							name="username"
+							name="first_name"
 							type="text"
-							placeholder="Username"
-							value={user.name}
+							placeholder="Enter first name" required
+							value={!!user.first_name ? user.first_name : ''}
+						/>
+					</fieldset>
+					<fieldset class="form-group mb-3">
+						<label class="form-label">Last Name:</label>
+						<input
+							class="form-control form-control-lg"
+							name="last_name"
+							type="text"
+							placeholder="Enter last name" required
+							value={!!user.last_name ? user.last_name : ''}
 						/>
 					</fieldset>
 
-					<fieldset class="form-group">
-						<label>Email:</label>
+					<fieldset class="form-group mb-3">
+						<label class="form-label">Email:</label>
 						<input
 							class="form-control form-control-lg"
 							name="email"
 							type="email"
-							placeholder="Email"
-							value={user.email}
+							placeholder="Enter email" required
+							value={!!user.email ? user.email : ''}
 						/>
 					</fieldset>
 
-					<fieldset class="form-group">
-						<label>Password:</label>
+					<fieldset class="form-group mb-3">
+						<label class="form-label">Password:</label>
 						<input
 							class="form-control form-control-lg"
 							name="password"
 							type="password"
-							placeholder="New Password" style="margin-bottom: 10px;"
+							placeholder="New Password" style="margin-bottom: 10px;" required
+							bind:value={password}
 						/>
 						<input
 							class="form-control form-control-lg"
-							name="password"
 							type="password"
 							placeholder="Confirm Password"
+							bind:value={password_check} required
 						/>
 					</fieldset>
+
+					<div class="mb-3">
+						<label class="form-label">  </label>
+						<div class="d-flex">
+							{#if !password || password === password_check}
+
+							{:else }
+								<p class="text-danger">Password is incorrect!</p>
+							{/if}
+
+							{#if errors.length > 0}
+								{#each errors as item}
+									<div><i class="fas fa-circle"></i></div>
+									<div>{item.msg}</div>
+								{/each}
+							{/if}
+						</div>
+					</div>
 
 					<button class="btn btn-lg btn-primary pull-xs-right">Save Settings</button>
 				</form>

@@ -11,7 +11,7 @@
 </script>
 
 <style>
-    .profile-page{padding-top: 40px;}
+    .profile-page{padding-top: 40px;width: 600px;}
     .profile-page>h1{margin-bottom: 40px;}
     .profile-page div.avatar{display: flex;margin-bottom: 40px;}
     .profile-page div.avatar>.photo{margin-right: 40px;}
@@ -41,30 +41,30 @@
         </div>
         <div class="user-name">
             <div>Username: </div>
-            <div>{user.name}</div>
+            <div>{!!user.first_name ? user.first_name : ''} {!!user.last_name ? user.last_name : ''}</div>
         </div>
     </div>
 
     <div class="info">
         <div>
             <div class="">First Name: </div>
-            <div>name</div>
+            <div>{!!user.first_name ? user.first_name : ''}</div>
         </div>
         <div>
             <div class="">Last Name: </div>
-            <div>surname</div>
+            <div>{!!user.last_name ? user.last_name : ''}</div>
         </div>
         <div>
             <div class="">E-mail: </div>
-            <div>{user.email}</div>
+            <div>{!!user.email ? user.email : ''}</div>
         </div>
         <div>
             <div class="">Address: </div>
-            <div>Welingstraat 89, 4523FR</div>
+            <div>{!!user.address ? user.address : ''}</div>
         </div>
         <div>
             <div class="">Birthday: </div>
-            <div>13-02-1990</div>
+            <div>{!!user.birthday ? user.birthday : ''}</div>
         </div>
     </div>
 </div>

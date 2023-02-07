@@ -28,7 +28,7 @@
             await axios.post(BACKEND_HOST + '/api/users', formData)
                 .then(response => {
                     // handle success
-                    console.log(response.data)
+                    // console.log(response.data)
 
                     location.href = '/admin/customers';
                 })

@@ -21,13 +21,15 @@
         if (parsed.error) {
             error = parsed.error;
         } else {
-            $session.token = parsed.token;
+            $session.token_id = parsed.token_id;
             $session.role = parsed.role;
+            $session.token = parsed.token;
 
-            localStorage.setItem('token', parsed.token);
+            localStorage.setItem('token_id', parsed.token_id);
             localStorage.setItem('role', parsed.role);
+            localStorage.setItem('token', parsed.token);
 
-            console.log(parsed);
+            // console.log(parsed);
 
             if(parsed.role == 0){ // customer
                 location.href = '/converter';
@@ -105,7 +107,7 @@
 
                         <div>
                             {#if error}
-                                <p class="error-messages">{error}</p>
+                                <p class="error-messages text-danger">{error}</p>
                             {/if}
                         </div>
 

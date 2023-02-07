@@ -8,6 +8,7 @@ export default function authMiddleware(req, res, next) {
                                         || req.url.startsWith('/history')
                                         || req.url.startsWith('/profile')
                                         || req.url.startsWith('/settings')
+                                        || req.url.startsWith('/gadmin')
                                         || req.url.startsWith('/admin');
 
     if(!isControllerOrDocumentRequest){
@@ -20,6 +21,18 @@ export default function authMiddleware(req, res, next) {
         if((req.path.indexOf('/admin') >= 0 && req.session.role < 1)
             || (req.path.indexOf('/gadmin') >= 0 && req.session.role != 2)){
             res.writeHead(302, { Location: '/login' });
+            return res.end();
+        }
+
+        if(req.path.indexOf('/login') >= 0){
+            if(req.session.role == 2){
+                res.writeHead(302, { Location: '/gadmin/companies' });
+            }else if(req.session.role == 1){
+                res.writeHead(302, { Location: '/admin/customers' });
+            }else{
+                res.writeHead(302, { Location: '/converter' });
+            }
+
             return res.end();
         }
 

@@ -60,13 +60,13 @@
 				.then(response => {
 					// handle success
 					// console.log(response.data)
-					console.log(response.data);
+					// console.log(response.data);
 
 					toastBody = "Deleted successfully!";
 					showToast();
 				})
 				.catch(error => {
-					console.log(error);
+					// console.log(error);
 
 					toastBody = "Error happened!";
 					showToast();

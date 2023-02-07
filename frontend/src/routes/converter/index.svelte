@@ -92,28 +92,22 @@
 					<thead>
 						<tr>
 							<th>Name</th>
-							<th>Type</th>
 							<th>Expected Throughput</th>
 							<th>Vendor</th>
 							<th class="center">Active</th>
-							<th class="center">SmartConnected</th>
-							<th>Tickets</th>
-							<th>Logs</th>
+							<th class="center">Tickets</th>
+							<th class="center">Logs</th>
 						</tr>
 					</thead>
 					<tbody>
 						{#each posts as item}
 							<tr>
-								<td><a href="/converter/{item.id}" target="_blank" on:click={() => setCurrentConverter(item.name)}>{item.name}</a></td>
-								<td>{item.type}</td>
-								<td>{item.type}</td>
-								<td>{item.vendor}</td>
+								<td><a href="/converter/{item.id}" target="_blank" on:click={() => setCurrentConverter(item.name)}>
+									{!!item.name ? item.name : ''}({!!item.serial_number ? item.serial_number : ''})
+								</a></td>
+								<td>{!!item.expected_throughput ? item.expected_throughput : ''}</td>
+								<td>{!!item.vendor ? item.vendor : ''}</td>
 
-								{#if item.status == 'ok'}
-									<td class="status center"><i class="fas fa-circle green"></i></td>
-								{:else}
-									<td class="status center"><i class="fas fa-circle"></i></td>
-								{/if}
 								{#if item.status == 'ok'}
 									<td class="status center"><i class="fas fa-circle green"></i></td>
 								{:else}

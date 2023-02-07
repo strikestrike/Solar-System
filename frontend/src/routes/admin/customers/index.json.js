@@ -13,7 +13,7 @@ export async function get(req, res) {
 		}
 
 		const {BACKEND_HOST} = process.env;
-		let url = BACKEND_HOST + '/api/companies/' + req.session.token.company_id + '/users?';
+		let url = BACKEND_HOST + '/api/companies/' + req.session.user.company_id + '/users?';
 
 		if(params.q){
 			url += 'q=' + params.q;

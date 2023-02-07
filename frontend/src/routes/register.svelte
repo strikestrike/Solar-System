@@ -115,15 +115,6 @@
                                 placeholder="Enter last name"
                         />
                     </fieldset>
-                    <fieldset class="form-group mb-3">
-                        <label class="form-label">
-                            Title:
-                        </label>
-                        <select class="form-select">
-                            <option value="0">Option 0</option>
-                            <option value="1">Option 1</option>
-                        </select>
-                    </fieldset>
 
                     <fieldset class="mb-3">
                         <label class="form-label">Address:</label>

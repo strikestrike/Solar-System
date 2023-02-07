@@ -1,24 +1,15 @@
 import axios from "axios";
 
-const headers = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-};
-
 export async function post(req, res) {
     try {
-        const { first_name, last_name } = req.body;
+        const { email, password } = req.body;
 
         const {BACKEND_HOST} = process.env;
 
-        await axios.post(BACKEND_HOST + '/api/signup', req.body)
+        await axios.put(BACKEND_HOST + '/api/profile', req.body)
             .then(response => {
                 // handle success
-                let user = response.data.user;
-
-                req.session.user = user;
-
-                res.end(JSON.stringify({ token: user}));
+                res.end(JSON.stringify({ success: true }));
             })
             .catch(error => {
                 throw new Error(error.response.data.error);

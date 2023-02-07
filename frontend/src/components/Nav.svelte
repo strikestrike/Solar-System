@@ -62,7 +62,6 @@
 	nav div.container-fluid div.logo{display: flex;align-items: center;}
 	nav div.container-fluid div.logo>a{margin: 0;padding: 0;}
 </style>
-
 <nav class="navbar navbar-light">
 	<div class="container-fluid">
 		<div class="logo">
@@ -70,8 +69,6 @@
 		</div>
 
 		<ul class="nav pull-xs-right">
-			<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">Home</a></li>
-
 			{#if isLogin && role == 0}
 				<li><a aria-current="{segment === 'converter' ? 'page' : undefined}" href="/converter">Converter</a></li>
 			{/if}
