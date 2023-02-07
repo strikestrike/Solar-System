@@ -60,6 +60,7 @@ exports.getUsers = async (req, res) => {
 
     if (req.params.companyId) {
         conditions.push({ company_id: req.params.companyId });
+        conditions.push({ role: constant.ROLE_CUSTOMER });
     }
 
     User.findAll({ where: { [Op.and]: conditions } })
