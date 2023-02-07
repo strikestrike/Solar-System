@@ -1,10 +1,12 @@
 <script context="module">
-	export async function preload({ params, query }) {
+	export async function preload(page, session) {
 		// the `slug` parameter is available because
 		// this file is called [slug].svelte
-		const res = await this.fetch(`/gadmin/companies/${params.id}.json?q=` + query.q);
-		const data = await res.json();
+		let q = page.query.q;
+		if(!q) q = '';
 
+		const res = await this.fetch(`/gadmin/companies/${page.params.id}.json?q=` + q);
+		const data = await res.json();
 		if (res.status === 200) {
 			return { posts: data };
 		} else {
