@@ -3,7 +3,7 @@
         const { token, role } = session;
 
         if (token) {
-            return {token};
+            return {token, role};
         }else{
             return null;
         }
@@ -11,7 +11,10 @@
 </script>
 
 <script>
+    import {onMount} from "svelte";
+
     export let token;
+    export let role;
 
     let errors = [];
 
@@ -21,6 +24,11 @@
     let birthday;
     let address;
     let additional;
+    let currentCompanyId;
+
+    onMount(() => {
+        currentCompanyId = localStorage.getItem('currentCompanyId');
+    })
 
     async function submitForm() {
         const response = await fetch("/admin/add-user", {
@@ -36,7 +44,7 @@
                 birthday,
                 address,
                 additional,
-                company_id: token.company_id
+                company_id: token.company_id ? token.company_id : currentCompanyId
             }),
         });
 
@@ -54,7 +62,13 @@
             }
 
         }else{
-            location.href = '/admin/customers';
+            if(role == 2){
+
+
+                location.href = '/gadmin/companies/' + currentCompanyId;
+            }else{
+                location.href = '/admin/customers';
+            }
         }
     }
 </script>

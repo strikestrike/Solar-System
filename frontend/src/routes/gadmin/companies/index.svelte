@@ -44,8 +44,9 @@
 		}
 	}
 
-	function setCurrentConverter(name){
-		localStorage.setItem('currentConverter', name);
+	function setCurrentCompany(name, id){
+		localStorage.setItem('currentCompanyName', name);
+		localStorage.setItem('currentCompanyId', id);
 	}
 
 	function controlConfirm(){
@@ -129,7 +130,7 @@
 					<tbody>
 						{#each posts as item}
 							<tr>
-								<td><a href="/gadmin/companies/{item.id}" target="_blank">{item.name}</a></td>
+								<td><a href="/gadmin/companies/{item.id}" on:click={setCurrentCompany(item.name, item.id)}>{item.name}</a></td>
 								<td class="center"><a class="text-body" href="/admin/edit-user/{item.id}"><i class="fas fa-edit"></i></a></td>
 								<td class="center"><span class="link" on:click={() => clickDeleteCustomer(item.id)}><i class="fas fa-trash-alt"></i></span></td>
 							</tr>

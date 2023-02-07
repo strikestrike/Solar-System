@@ -1,12 +1,12 @@
 <script context="module">
-    export async function preload({params}) {
+    export async function preload(page, session) {
         // the `slug` parameter is available because
         // this file is called [slug].svelte
-        const res = await this.fetch(`/user/${params.id}.json`);
+        const res = await this.fetch(`/user/${page.params.id}.json`);
         const data = await res.json();
 
         if (res.status === 200) {
-            return { post: data };
+            return { post: data, role: session.role };
         } else {
             this.error(res.status, data.message);
         }
@@ -15,6 +15,7 @@
 
 <script>
     export let post;
+    export let role;
 
     let errors = [];
     let firstName = post.first_name;
@@ -56,7 +57,11 @@
             }
 
         }else{
-            location.href = '/admin/customers';
+            if(role == 2){
+                location.href = '/gadmin/companies/' + post.company_id;
+            }else{
+                location.href = '/admin/customers';
+            }
         }
 
     }

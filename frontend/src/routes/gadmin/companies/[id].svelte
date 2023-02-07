@@ -1,8 +1,8 @@
 <script context="module">
-	export async function preload({ params }) {
+	export async function preload({ params, query }) {
 		// the `slug` parameter is available because
 		// this file is called [slug].svelte
-		const res = await this.fetch(`/gadmin/companies/${params.id}.json`);
+		const res = await this.fetch(`/gadmin/companies/${params.id}.json?q=` + query.q);
 		const data = await res.json();
 
 		if (res.status === 200) {
@@ -21,17 +21,33 @@
 
 	export let posts;
 
-	let currentCustomerName = '';
+	let errors = [];
+	let currentCompanyName = '';
+	let currentCompanyId;
 	let showModal;
 	let showConfirm = false;
 	let confirmText;
 	let confirmModal;
 	let toastBody;
+	let searchQuery;
 
 	onMount(() => {
-		currentCustomerName = localStorage.getItem('currentCustomerName');
+		currentCompanyName = localStorage.getItem('currentCompanyName');
+		currentCompanyId = localStorage.getItem('currentCompanyId');
+
+		searchQuery = localStorage.getItem("searchQuery") || "";
 	})
 
+	const inputKeypressEvent = (e) => {
+		if(e.keyCode === 13){
+			handleSubmit();
+		}
+	}
+
+	const handleSubmit = () => {
+		localStorage.setItem("searchQuery", searchQuery);
+		location.href = location.pathname + `?q=${searchQuery}`;
+	}
 
 	function clickDeleteCustomer(id){
 		confirmText = 'Are you sure you want to delete this customer?';
@@ -52,27 +68,35 @@
 		localStorage.setItem('currentCustomerName', name);
 	}
 
-	function deleteAction(){
+	async function deleteAction(){
 		let id = localStorage.getItem('currentCustomerId');
 
 		confirmModal.hide();
 
-		const {BACKEND_HOST} = process.env;
-		axios.delete(BACKEND_HOST + '/api/users/' + id)
-				.then(response => {
-					// handle success
-					// console.log(response.data)
-					// console.log(response.data);
+		const response = await fetch("/admin/customers/delete/" + id, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Accept: "application/json",
+			}
+		});
 
-					toastBody = "Deleted successfully!";
-					showToast();
-				})
-				.catch(error => {
-					// console.log(error);
+		const parsed = await response.json();
 
-					toastBody = "Error happened!";
-					showToast();
-				});
+		if(parsed.error){
+			if(parsed.error.errors){
+				errors = parsed.error.errors;
+			}else{
+				errors = [
+					{
+						msg: parsed.error.error
+					}
+				]
+			}
+
+		}else{
+			location.reload();
+		}
 	}
 
 	function showToast(){
@@ -140,7 +164,7 @@
 <div class="home-page">
 	<div class="search-bar container">
 		<div>
-			<h2>{currentCustomerName}</h2>
+			<h2>{currentCompanyName}</h2>
 		</div>
 
 		<div style="flex-grow: 1;"></div>
@@ -154,7 +178,7 @@
 				<img src="/user-search.svg" alt="search user svg" id="svg-user-search">
 			</label>
 
-			<input class="form-control" type="text">
+			<input class="form-control" type="text" bind:value={searchQuery} on:keypress={inputKeypressEvent}>
 		</div>
 	</div>
 
@@ -172,7 +196,7 @@
 					<tbody>
 						{#each posts as item}
 							<tr>
-								<td><a on:click={() => setCurrentCustomer(item.first_name + ' ' + item.last_name)} href="/admin/customers/{item.id}">{item.first_name + ' ' + item.last_name}</a></td>
+								<td><a on:click={() => setCurrentCustomer(item.first_name + ' ' + item.last_name)} href="/gadmin/customers/{item.id}">{item.first_name + ' ' + item.last_name}</a></td>
 								<td class="center"><a href="/admin/edit-user/{item.id}"><i class="fas fa-edit"></i></a></td>
 								<td class="center"><span class="link" on:click={() => clickDeleteCustomer(item.id)}><i class="fas fa-trash-alt"></i></span></td>
 							</tr>

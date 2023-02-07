@@ -16,7 +16,7 @@ export async function get(req, res) {
 		let url = BACKEND_HOST + '/api/companies';
 
 		if(params.q){
-			url += 'q=' + params.q;
+			url += '?q=' + params.q;
 		}
 
 		axios.get(url)

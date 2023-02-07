@@ -2,8 +2,11 @@
     export async function preload(page, session) {
         const { token, role } = session;
 
+        const res = await this.fetch(`/admin/customers/all-converters.json`);
+        const data = await res.json();
+
         if (token) {
-            return {token};
+            return {token, converterList: data};
         }else{
             return null;
         }
@@ -11,45 +14,50 @@
 </script>
 
 <script>
-    import axios from "axios";
     import {onMount} from "svelte";
 
     export let token;
+    export let converterList;
 
     let errors = [];
+    let name;
+    let admin;
+    let description;
+    let converters = [];
 
     onMount(() => {
-        const select = document.querySelector("select");
-        select.vanillaSelect();
     });
 
-    async function submitForm(event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
+    async function submitForm() {
+        const response = await fetch("/gadmin/add-company", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: JSON.stringify({
+                name,
+                admin,
+                description,
+                converters: converters.join(',')
+            }),
+        });
 
-        formData.set('company_id', token.company_id);
+        const parsed = await response.json();
 
-        try {
-            const {BACKEND_HOST} = process.env;
-            await axios.post(BACKEND_HOST + '/api/companies', formData)
-                .then(response => {
-                    // handle success
-                    // console.log(response.data)
-
-                    location.href = '/gadmin/companies';
-                })
-                .catch(error => {
-                    if(error.response.data.error){
-                        errors = [
-                            {msg: error.response.data.error}
-                        ];
-                    }else{
-                        errors = error.response.data.errors;
+        if(parsed.error){
+            if(parsed.error.errors){
+                errors = parsed.error.errors;
+            }else{
+                errors = [
+                    {
+                        msg: parsed.error.error
                     }
-                });
+                ]
+            }
 
-        } catch (error) {
-            console.error(error);
+        }else{
+            location.href = '/gadmin/companies';
         }
     }
 </script>
@@ -80,24 +88,26 @@
     </div>
 
     <div class="form-container">
-        <form method="post" on:submit={submitForm}>
+        <form method="post" on:submit|preventDefault={submitForm}>
             <div class="form-group">
                 <label class="form-label" for="name">Company Name: </label>
-                <input type="text" id="name" name="name" class="form-control" required>
+                <input type="text" id="name" name="name" class="form-control" required bind:value={name}>
             </div>
             <div class="form-group">
                 <label class="form-label" for="admin">Administrator: </label>
-                <input type="email" id="admin" name="admin" class="form-control" required>
+                <input type="email" id="admin" name="admin" class="form-control" required bind:value={admin}>
             </div>
             <div class="form-group">
                 <label class="form-label" for="converters">Converters: </label>
-                <select class="form-control" multiple id="converters" name="converters">
-                    <option></option>
+                <select class="form-select" multiple id="converters" name="converters" bind:value={converters}>
+                    {#each converterList as item}
+                        <option value="{item.id}">{item.name}[{item.serial_number}]</option>
+                    {/each}
                 </select>
             </div>
             <div class="form-group">
                 <label class="form-label" for="additional">Additional: </label>
-                <textarea id="additional" rows="4" class="form-control" required></textarea>
+                <textarea id="additional" rows="4" class="form-control" required bind:value={description}></textarea>
             </div>
             <div class="form-group">
                 <button class="btn btn-primary" type="submit">Save</button>

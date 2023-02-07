@@ -76,6 +76,9 @@
 				<li><a href="/admin/customers">Customers</a></li>
 				<li><a href="/admin/converters">Converters</a></li>
 			{/if}
+			{#if isLogin && role == 2}
+				<li><a href="/gadmin/companies">Companies</a></li>
+			{/if}
 
 			{#if isLogin}
 				<li><a rel=prefetch aria-current="{segment === 'profile' ? 'page' : undefined}" href="/profile">Profile</a></li>

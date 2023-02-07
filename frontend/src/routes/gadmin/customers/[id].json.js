@@ -3,7 +3,7 @@ import axios from "axios";
 export function get(req, res, next) {
 	// the `slug` parameter is available because
 	// this file is called [slug].json.js
-	const { id, q } = req.params;
+	const { id } = req.params;
 
 	res.writeHead(200, {
 		'Content-Type': 'application/json'
@@ -11,14 +11,14 @@ export function get(req, res, next) {
 
 	try {
 		if(!req.session.token){
-			location.href = '/login';
+			res.statusCode = 403;
+			res.end(JSON.stringify({
+				message: `Not allowed request`
+			}));
 		}
-		const {BACKEND_HOST} = process.env;
-		let url = BACKEND_HOST + '/api/companies/' + id + '/users?';
 
-		if(req.query.q){
-			url += 'q=' + req.query.q;
-		}
+		const {BACKEND_HOST} = process.env;
+		let url = BACKEND_HOST + '/api/users/' + id + '/converters?';
 
 		axios.get(url)
 			.then(response => {

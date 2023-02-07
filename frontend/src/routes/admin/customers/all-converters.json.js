@@ -8,8 +8,14 @@ export function get(req, res, next) {
         }));
     }
 
+    let companyId = req.session.token.company_id;
+
+    if(!companyId) companyId = 0;
+
     const {BACKEND_HOST} = process.env;
-    let url = BACKEND_HOST + '/api/companies/' + req.session.token.company_id + '/converters?filter_flag=1';
+    let url = BACKEND_HOST + '/api/companies/' + companyId + '/converters?filter_flag=1';
+
+    console.log(url);
 
     axios.get(url)
         .then(response => {
@@ -20,8 +26,6 @@ export function get(req, res, next) {
         .catch(error => {
             res.statusCode = 404;
 
-            res.end(JSON.stringify({
-                message: `Not found`
-            }));
+            res.end(JSON.stringify(error));
         })
 }
