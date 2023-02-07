@@ -3,6 +3,8 @@ const { check, validationResult } = require('express-validator');
 
 const Op = db.Sequelize.Op;
 const Company = db.Company;
+const User = db.User;
+const Converter = db.Converter;
 
 exports.createCompany = async (req, res) => {
     const errors = validationResult(req);
@@ -10,11 +12,16 @@ exports.createCompany = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { photo, name, description, admin } = req.body;
+    const { name, description, admin, converters } = req.body;
 
     const companyExists = await Company.findOne({ where: { name: name } });
     if (companyExists) {
         return res.status(400).json({ error: "Company already exists" });
+    }
+
+    const adminUser = await User.findOne({ where: { email: admin } });
+    if (!adminUser) {
+        return res.status(400).json({ error: "No user exists for the admin" });
     }
 
     // Create a company
@@ -22,12 +29,24 @@ exports.createCompany = async (req, res) => {
         photo: (req.file !== undefined ? "/uploads/" + req.file.filename : null),
         name,
         description,
-        admin: (admin ? admin : null),
+        admin: (adminUser ? adminUser.id : null),
     };
 
     // Save Company in the database
     Company.create(company)
-        .then(data => {
+        .then(async data => {
+            adminUser.company_id = data.id;
+            await adminUser.save();
+
+            if (converters) {
+                await Converter.update({ company_id: data.id }, {
+                    where: {
+                        id: {
+                            [Op.in]: converters.split(',').filter(Boolean)
+                        }
+                    }
+                });
+            }
             res.send(data);
         })
         .catch(err => {
