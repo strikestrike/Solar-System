@@ -11,7 +11,10 @@ export function get(req, res, next) {
 
 	try {
 		if(!req.session.token){
-			location.href = '/login';
+			res.statusCode = 403;
+			res.end(JSON.stringify({
+				message: `Not allowed request`
+			}));
 		}
 
 		const {BACKEND_HOST} = process.env;

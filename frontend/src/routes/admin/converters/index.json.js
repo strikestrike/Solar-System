@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export async function get(req, res) {
 	res.writeHead(200, {
@@ -11,9 +11,8 @@ export async function get(req, res) {
 		if(!req.session.token){
 			location.href = '/login';
 		}
-
 		const {BACKEND_HOST} = process.env;
-		let url = BACKEND_HOST + '/api/companies/' + req.session.token.company_id + '/users?';
+		let url = BACKEND_HOST + '/api/companies/' + req.session.token.company_id + '/converters?';
 
 		if(params.q){
 			url += 'q=' + params.q;

@@ -16,7 +16,6 @@
 	import {onMount} from 'svelte';
 	import Modal from "../../../components/Modal.svelte";
 	import Toast from "../../../components/Toast.svelte";
-	import axios from "axios";
 
 	export let posts;
 	let toastBody;
@@ -24,6 +23,7 @@
 	let showModal;
 	let showConfirm = false;
 	let confirmText;
+	let errors = [];
 
 	onMount(() => {
 
@@ -46,31 +46,41 @@
 		confirmModal.show();
 	}
 
-	function setCurrentCustomer(name){
+	function setCurrentCustomer(name, id, companyId){
 		localStorage.setItem('currentCustomerName', name);
+		localStorage.setItem('currentCustomerId', id);
+		localStorage.setItem('currentCompanyId', companyId);
 	}
 
-	function deleteAction(){
+	async function deleteAction(){
 		let id = localStorage.getItem('currentCustomerId');
 
 		confirmModal.hide();
 
-		const {BACKEND_HOST} = process.env;
-		axios.delete(BACKEND_HOST + '/api/users/' + id)
-				.then(response => {
-					// handle success
-					// console.log(response.data)
-					// console.log(response.data);
+		const response = await fetch("/admin/customers/delete/" + id, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Accept: "application/json",
+			}
+		});
 
-					toastBody = "Deleted successfully!";
-					showToast();
-				})
-				.catch(error => {
-					// console.log(error);
+		const parsed = await response.json();
 
-					toastBody = "Error happened!";
-					showToast();
-				});
+		if(parsed.error){
+			if(parsed.error.errors){
+				errors = parsed.error.errors;
+			}else{
+				errors = [
+					{
+						msg: parsed.error.error
+					}
+				]
+			}
+
+		}else{
+			location.reload();
+		}
 	}
 
 	function showToast(){
@@ -169,7 +179,7 @@
 					<tbody>
 						{#each posts as item}
 							<tr>
-								<td><a on:click={() => setCurrentCustomer(item.first_name + ' ' + item.last_name)} href="/admin/customers/{item.id}">{item.first_name + ' ' + item.last_name}</a></td>
+								<td><a on:click={() => setCurrentCustomer(item.first_name + ' ' + item.last_name, item.id, item.company_id)} href="/admin/customers/{item.id}">{item.first_name + ' ' + item.last_name}</a></td>
 								<td class="center"><a href="/admin/edit-user/{item.id}"><i class="fas fa-edit"></i></a></td>
 								<td class="center"><span class="link" on:click={() => clickDeleteCustomer(item.id)}><i class="fas fa-trash-alt"></i></span></td>
 							</tr>

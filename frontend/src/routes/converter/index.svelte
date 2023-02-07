@@ -103,12 +103,12 @@
 						{#each posts as item}
 							<tr>
 								<td><a href="/converter/{item.id}" target="_blank" on:click={() => setCurrentConverter(item.name)}>
-									{!!item.name ? item.name : ''}({!!item.serial_number ? item.serial_number : ''})
+									{!!item.name ? item.name : ''}[{!!item.serial_number ? item.serial_number : ''}]
 								</a></td>
 								<td>{!!item.expected_throughput ? item.expected_throughput : ''}</td>
 								<td>{!!item.vendor ? item.vendor : ''}</td>
 
-								{#if item.status == 'ok'}
+								{#if item.status == 'Ok'}
 									<td class="status center"><i class="fas fa-circle green"></i></td>
 								{:else}
 									<td class="status center"><i class="fas fa-circle"></i></td>

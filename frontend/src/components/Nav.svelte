@@ -73,7 +73,8 @@
 				<li><a aria-current="{segment === 'converter' ? 'page' : undefined}" href="/converter">Converter</a></li>
 			{/if}
 			{#if isLogin && role == 1}
-				<li><a aria-current="{segment === 'customers' ? 'page' : undefined}" href="/admin/customers">Customers</a></li>
+				<li><a href="/admin/customers">Customers</a></li>
+				<li><a href="/admin/converters">Converters</a></li>
 			{/if}
 
 			{#if isLogin}

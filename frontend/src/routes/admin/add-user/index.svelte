@@ -11,39 +11,50 @@
 </script>
 
 <script>
-    import axios from "axios";
-
     export let token;
 
     let errors = [];
 
-    async function submitForm(event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
+    let firstName;
+    let lastName;
+    let email;
+    let birthday;
+    let address;
+    let additional;
 
-        formData.set('company_id', token.company_id);
+    async function submitForm() {
+        const response = await fetch("/admin/add-user", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: JSON.stringify({
+                first_name: firstName,
+                last_name: lastName,
+                email,
+                birthday,
+                address,
+                additional,
+                company_id: token.company_id
+            }),
+        });
 
-        try {
-            const {BACKEND_HOST} = process.env;
-            await axios.post(BACKEND_HOST + '/api/users', formData)
-                .then(response => {
-                    // handle success
-                    // console.log(response.data)
+        const parsed = await response.json();
 
-                    location.href = '/admin/customers';
-                })
-                .catch(error => {
-                    if(error.response.data.error){
-                        errors = [
-                            {msg: error.response.data.error}
-                        ];
-                    }else{
-                        errors = error.response.data.errors;
+        if(parsed.error){
+            if(parsed.error.errors){
+                errors = parsed.error.errors;
+            }else{
+                errors = [
+                    {
+                        msg: parsed.error.error
                     }
-                });
+                ]
+            }
 
-        } catch (error) {
-            console.error(error);
+        }else{
+            location.href = '/admin/customers';
         }
     }
 </script>
@@ -73,30 +84,30 @@
     </div>
 
     <div class="form-container">
-        <form method="post" on:submit={submitForm}>
+        <form method="post" on:submit|preventDefault={submitForm}>
             <div class="form-group">
                 <label class="form-label" for="first-name">First Name: </label>
-                <input type="text" id="first-name" name="first_name" class="form-control" required>
+                <input type="text" id="first-name" name="first_name" class="form-control" required bind:value={firstName}>
             </div>
             <div class="form-group">
                 <label class="form-label" for="last-name">Last Name: </label>
-                <input type="text" id="last-name" name="last_name" class="form-control" required>
+                <input type="text" id="last-name" name="last_name" class="form-control" required bind:value={lastName}>
             </div>
             <div class="form-group">
                 <label class="form-label" for="email">Email: </label>
-                <input type="email" id="email" name="email" class="form-control" required>
+                <input type="email" id="email" name="email" class="form-control" required bind:value={email}>
             </div>
             <div class="form-group">
                 <label class="form-label" for="birthday">Birthday: </label>
-                <input type="date" id="birthday" name="birthday" class="form-control" required>
+                <input type="date" id="birthday" name="birthday" class="form-control" required bind:value={birthday}>
             </div>
             <div class="form-group">
                 <label class="form-label" for="address">Address: </label>
-                <input type="text" id="address" name="address" class="form-control" required>
+                <input type="text" id="address" name="address" class="form-control" required bind:value={address}>
             </div>
             <div class="form-group">
                 <label class="form-label" for="additional">Additional: </label>
-                <textarea id="additional" rows="4" class="form-control" required></textarea>
+                <textarea id="additional" rows="4" class="form-control" required bind:value={additional}></textarea>
             </div>
             <div class="form-group">
                 <button class="btn btn-primary" type="submit">Save</button>

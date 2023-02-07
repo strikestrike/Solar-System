@@ -15,7 +15,7 @@
 	let password_check;
 	let errors = [];
 
-	async function handleSubmit(){
+	async function handleSubmit(event){
 		const formData = new FormData(event.target);
 
 		try {
