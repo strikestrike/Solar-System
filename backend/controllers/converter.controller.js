@@ -63,6 +63,10 @@ exports.getConverters = (req, res) => {
         conditions.push({ company_id: req.params.companyId });
     }
 
+    if (req.query.filter_flag && req.query.filter_flag == 1) {
+        conditions.push({ user_id: null });
+    }
+
     Converter.findAll({
         where: { [Op.and]: conditions },
         // include: [

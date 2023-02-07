@@ -450,7 +450,6 @@ module.exports = {
       status: 'Ok',
       expected_throughput: 200,
       company_id: 1,
-      user_id: 9,
       created_at: new Date(),
       updated_at: new Date()
     }]);
