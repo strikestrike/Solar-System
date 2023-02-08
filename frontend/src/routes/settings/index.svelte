@@ -1,8 +1,8 @@
 <script context="module">
 	export async function preload(page, session) {
-		const { token } = session;
-
-		return {user: token};
+		return this.fetch(`profile.json`).then(r => r.json()).then(user => {
+			return { user };
+		});
     }
 </script>
 

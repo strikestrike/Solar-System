@@ -11,7 +11,7 @@ export async function post(req, res) {
                 method: 'PUT',
                 headers: {
                     'x-access-token': req.session.token_id,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 data: req.body
             })

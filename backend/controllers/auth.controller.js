@@ -88,6 +88,10 @@ exports.updateProfile = async (req, res) => {
         if (req.body.last_name) updateFields.last_name = req.body.last_name;
         if (req.body.address) updateFields.address = req.body.address;
         if (req.body.birthday) updateFields.birthday = req.body.birthday;
+
+        console.log('>>>>', req.body);
+
+
         if (req.body.password) {
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
             updateFields.password = hashedPassword;
