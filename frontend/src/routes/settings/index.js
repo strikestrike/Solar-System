@@ -6,9 +6,18 @@ export async function post(req, res) {
 
         const {BACKEND_HOST} = process.env;
 
-        await axios.put(BACKEND_HOST + '/api/profile', req.body)
+        await axios.request({
+                url: BACKEND_HOST + '/api/profile',
+                method: 'PUT',
+                headers: {
+                    'x-access-token': req.session.token_id,
+                    'Content-Type': 'application/json'
+                },
+                data: req.body
+            })
             .then(response => {
                 // handle success
+                console.log(response);
                 res.end(JSON.stringify({ success: true }));
             })
             .catch(error => {

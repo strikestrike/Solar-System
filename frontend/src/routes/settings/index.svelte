@@ -13,13 +13,22 @@
 
 	let password;
 	let password_check;
+	let firstName = !!user.first_name ? user.first_name : '';
+	let lastName = !!user.last_name ? user.last_name : '';
+	let email = !!user.email ? user.email : '';
+
 	let errors = [];
 
 	async function handleSubmit(event){
 		const formData = new FormData(event.target);
 
 		try {
-			await axios.post('/settings', formData)
+			await axios.post('/settings', {
+				first_name: firstName,
+				last_name: lastName,
+				email,
+				password
+			})
 					.then(response => {
 						// handle success
 						// console.log(response.data)
@@ -64,7 +73,7 @@
 							name="first_name"
 							type="text"
 							placeholder="Enter first name" required
-							value={!!user.first_name ? user.first_name : ''}
+							bind:value={firstName}
 						/>
 					</fieldset>
 					<fieldset class="form-group mb-3">
@@ -74,7 +83,7 @@
 							name="last_name"
 							type="text"
 							placeholder="Enter last name" required
-							value={!!user.last_name ? user.last_name : ''}
+							bind:value={lastName}
 						/>
 					</fieldset>
 
@@ -85,7 +94,7 @@
 							name="email"
 							type="email"
 							placeholder="Enter email" required
-							value={!!user.email ? user.email : ''}
+							bind:value={email}
 						/>
 					</fieldset>
 
