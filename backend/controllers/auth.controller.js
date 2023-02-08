@@ -88,6 +88,10 @@ exports.updateProfile = async (req, res) => {
         if (req.body.last_name) updateFields.last_name = req.body.last_name;
         if (req.body.address) updateFields.address = req.body.address;
         if (req.body.birthday) updateFields.birthday = req.body.birthday;
+        if (req.body.password && req.body.password == req.body.password_repeat) {
+            const hashedPassword = await bcrypt.hash(req.body.password, 10);
+            updateFields.password = hashedPassword;
+        }
         if (req.file) updateFields.avatar = "/uploads/" + req.file.filename;
         await user.update(updateFields);
         return res.status(200).json({ msg: 'User updated successfully' });
